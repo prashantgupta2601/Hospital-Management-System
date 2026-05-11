@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST Controller for managing Doctor entities.
+ */
 @RestController
 @RequestMapping("/api/doctors")
 @RequiredArgsConstructor
