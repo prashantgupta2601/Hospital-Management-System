@@ -1,6 +1,13 @@
 const API_BASE_URL = 'http://localhost:8080/api';
 
+// Axios Global Configuration
+axios.defaults.baseURL = API_BASE_URL;
+
 document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
+
+function initApp() {
     // Sidebar Toggle
     const sidebarCollapse = document.getElementById('sidebarCollapse');
     const sidebar = document.getElementById('sidebar');
@@ -13,39 +20,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
     const htmlElement = document.documentElement;
-    const themeIcon = themeToggle.querySelector('i');
+    const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
 
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    htmlElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
+    if (themeToggle) {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
 
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
-        htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
 
     function updateThemeIcon(theme) {
+        if (!themeIcon) return;
         if (theme === 'dark') {
-            themeIcon.classList.replace('fa-moon', 'fa-sun');
+            themeIcon.className = 'fas fa-sun';
         } else {
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
+            themeIcon.className = 'fas fa-moon';
         }
     }
 
-    // Initialize Dashboard Data
-    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+    // Page Specific Initialization
+    const path = window.location.pathname;
+    if (path.endsWith('index.html') || path === '/' || path.endsWith('frontend/')) {
         loadDashboardStats();
         loadRecentAppointments();
+    } else if (path.endsWith('patients.html')) {
+        loadPatients();
+    } else if (path.endsWith('doctors.html')) {
+        loadDoctors();
+    } else if (path.endsWith('appointments.html')) {
+        loadAppointments();
     }
-});
+}
 
-// Axios Global Configuration
-axios.defaults.baseURL = API_BASE_URL;
-
+// Dashboard Functions
 async function loadDashboardStats() {
     try {
         const [patients, doctors, appointments] = await Promise.all([
@@ -54,19 +69,26 @@ async function loadDashboardStats() {
             axios.get('/appointments')
         ]);
 
-        document.getElementById('total-patients').textContent = patients.data.length;
-        document.getElementById('total-doctors').textContent = doctors.data.length;
-        document.getElementById('total-appointments').textContent = appointments.data.length;
+        updateStat('total-patients', patients.data.length);
+        updateStat('total-doctors', doctors.data.length);
+        updateStat('total-appointments', appointments.data.length);
     } catch (error) {
         console.error('Error loading stats:', error);
     }
 }
 
+function updateStat(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
 async function loadRecentAppointments() {
     const tableBody = document.querySelector('#recent-appointments-table tbody');
+    if (!tableBody) return;
+
     try {
         const response = await axios.get('/appointments');
-        const appointments = response.data.slice(0, 5); // Get recent 5
+        const appointments = response.data.slice(0, 5);
 
         if (appointments.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No recent appointments found</td></tr>';
@@ -76,9 +98,9 @@ async function loadRecentAppointments() {
         tableBody.innerHTML = appointments.map(app => `
             <tr>
                 <td>#${app.id}</td>
-                <td>${app.patientName}</td>
+                <td><div class="fw-bold">${app.patientName}</div></td>
                 <td>Dr. ${app.doctorName}</td>
-                <td>${new Date(app.appointmentDate).toLocaleString()}</td>
+                <td>${new Date(app.appointmentDate).toLocaleDateString()}</td>
                 <td><span class="badge ${getStatusBadgeClass(app.status)}">${app.status}</span></td>
             </tr>
         `).join('');
@@ -90,9 +112,14 @@ async function loadRecentAppointments() {
 
 function getStatusBadgeClass(status) {
     switch (status) {
-        case 'SCHEDULED': return 'bg-primary';
-        case 'COMPLETED': return 'bg-success';
-        case 'CANCELLED': return 'bg-danger';
-        default: return 'bg-secondary';
+        case 'SCHEDULED': return 'bg-primary-soft text-primary';
+        case 'COMPLETED': return 'bg-success-soft text-success';
+        case 'CANCELLED': return 'bg-warning-soft text-warning';
+        default: return 'bg-secondary text-white';
     }
 }
+
+// Placeholder functions for other pages
+async function loadPatients() { console.log('Loading patients...'); }
+async function loadDoctors() { console.log('Loading doctors...'); }
+async function loadAppointments() { console.log('Loading appointments...'); }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointments - HMS</title>
+    <title>Appointments | HMS Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,165 +11,135 @@
 </head>
 <body>
 
+    <!-- Sidebar -->
     <nav id="sidebar">
-        <div class="sidebar-header p-4">
-            <h4 class="mb-0"><i class="fas fa-hospital-user me-2"></i> HMS Pro</h4>
+        <div class="sidebar-header">
+            <h4><i class="fas fa-hospital-symbol me-2"></i> HMS PRO</h4>
         </div>
-        <ul class="nav flex-column mt-3">
-            <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="patients.html"><i class="fas fa-user-injured"></i> Patients</a></li>
-            <li class="nav-item"><a class="nav-link" href="doctors.html"><i class="fas fa-user-md"></i> Doctors</a></li>
-            <li class="nav-item"><a class="nav-link active" href="appointments.html"><i class="fas fa-calendar-check"></i> Appointments</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-file-invoice-dollar"></i> Billings</a></li>
-        </ul>
+        <div class="nav flex-column mt-4">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-grid-2"></i> Dashboard
+            </a>
+            <a class="nav-link" href="patients.html">
+                <i class="fas fa-user-injured"></i> Patients
+            </a>
+            <a class="nav-link" href="doctors.html">
+                <i class="fas fa-user-md"></i> Doctors
+            </a>
+            <a class="nav-link active" href="appointments.html">
+                <i class="fas fa-calendar-alt"></i> Appointments
+            </a>
+            <div class="mt-auto mb-4">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </div>
     </nav>
 
+    <!-- Main Content -->
     <div id="content">
-        <nav class="navbar navbar-expand-lg navbar-light shadow-sm px-4">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-primary d-md-none"><i class="fas fa-align-left"></i></button>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid p-0">
+                <button type="button" id="sidebarCollapse" class="btn border-0 d-lg-none me-3">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="ms-auto d-flex align-items-center">
-                    <div id="theme-toggle" class="me-3"><i class="fas fa-moon"></i></div>
-                    <span class="d-none d-md-inline">Admin User</span>
+                    <div id="theme-toggle" class="me-3">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="35" height="35">
+                            <div class="d-none d-sm-block">
+                                <p class="mb-0 text-main fw-semibold small">Alex Johnson</p>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
+                            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
 
-        <div class="container-fluid fade-in">
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Appointments Management</h1>
-                <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#addAppointmentModal" onclick="prepareAppointmentModal()">
-                    <i class="fas fa-plus me-2"></i> Schedule Appointment
-                </button>
-            </div>
-
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="appointments-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Patient</th>
-                                    <th>Doctor</th>
-                                    <th>Date & Time</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data will be loaded here via JS -->
-                            </tbody>
-                        </table>
-                    </div>
+        <!-- Page Content -->
+        <div class="container-fluid p-4 fade-in">
+            <div class="row align-items-center mb-4">
+                <div class="col">
+                    <h3 class="fw-bold mb-1">Clinic Appointments</h3>
+                    <p class="text-muted small mb-0">Schedule and monitor all clinical visits.</p>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary px-4 shadow-sm">
+                        <i class="fas fa-calendar-plus me-2"></i> Book Appointment
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Add Appointment Modal -->
-    <div class="modal fade" id="addAppointmentModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Schedule New Appointment</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="add-appointment-form">
-                        <div class="mb-3">
-                            <label class="form-label">Select Patient</label>
-                            <select class="form-select" name="patientId" id="patient-select" required>
-                                <option value="">Loading patients...</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Select Doctor</label>
-                            <select class="form-select" name="doctorId" id="doctor-select" required>
-                                <option value="">Loading doctors...</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Appointment Date & Time</label>
-                            <input type="datetime-local" class="form-control" name="appointmentDate" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Notes</label>
-                            <textarea class="form-control" name="notes" rows="2"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-info text-white" id="save-appointment-btn">Schedule</button>
+            <!-- Appointments Table -->
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Patient Name</th>
+                                <th>Doctor</th>
+                                <th>Schedule Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data loaded via JS -->
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted small">Loading appointments...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', loadAppointments);
-
         async function loadAppointments() {
             const tableBody = document.querySelector('#appointments-table tbody');
             try {
                 const response = await axios.get('/appointments');
                 const appointments = response.data;
-                tableBody.innerHTML = appointments.map(app => `
+                
+                if (appointments.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No appointments found</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = appointments.map(a => `
                     <tr>
-                        <td>#${app.id}</td>
-                        <td>${app.patientName}</td>
-                        <td>Dr. ${app.doctorName}</td>
-                        <td>${new Date(app.appointmentDate).toLocaleString()}</td>
-                        <td><span class="badge ${getStatusBadgeClass(app.status)}">${app.status}</span></td>
+                        <td>#${a.id}</td>
+                        <td><div class="fw-bold text-primary">${a.patientName}</div></td>
+                        <td>Dr. ${a.doctorName}</td>
+                        <td>${new Date(a.appointmentDate).toLocaleString()}</td>
+                        <td><span class="badge ${getStatusBadgeClass(a.status)}">${a.status}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
-                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i></button>
+                            <button class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-sm btn-light text-warning"><i class="fas fa-times"></i></button>
                         </td>
                     </tr>
                 `).join('');
             } catch (error) {
                 console.error('Error loading appointments:', error);
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Failed to load appointments</td></tr>';
             }
         }
-
-        async function prepareAppointmentModal() {
-            const patientSelect = document.getElementById('patient-select');
-            const doctorSelect = document.getElementById('doctor-select');
-            
-            try {
-                const [patients, doctors] = await Promise.all([
-                    axios.get('/patients'),
-                    axios.get('/doctors')
-                ]);
-
-                patientSelect.innerHTML = '<option value="">Choose Patient...</option>' + 
-                    patients.data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-                
-                doctorSelect.innerHTML = '<option value="">Choose Doctor...</option>' + 
-                    doctors.data.map(d => `<option value="${d.id}">${d.name} (${d.specialization})</option>`).join('');
-            } catch (error) {
-                console.error('Error preparing modal:', error);
-            }
-        }
-
-        document.getElementById('save-appointment-btn').addEventListener('click', async () => {
-            const form = document.getElementById('add-appointment-form');
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            try {
-                await axios.post('/appointments', data);
-                bootstrap.Modal.getInstance(document.getElementById('addAppointmentModal')).hide();
-                form.reset();
-                loadAppointments();
-            } catch (error) {
-                alert('Error scheduling appointment: ' + (error.response?.data?.message || error.message));
-            }
-        });
     </script>
 </body>
 </html>
