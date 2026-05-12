@@ -74,7 +74,7 @@
                     <p class="text-muted small mb-0">Manage your doctors and clinical staff.</p>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary px-4 shadow-sm">
+                    <button class="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addDoctorModal">
                         <i class="fas fa-plus me-2"></i> Register Doctor
                     </button>
                 </div>
@@ -106,40 +106,47 @@
         </div>
     </div>
 
+    <!-- Add Doctor Modal -->
+    <div class="modal fade" id="addDoctorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Register New Doctor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="addDoctorForm" onsubmit="handleAddDoctor(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">First Name</label>
+                                <input type="text" name="firstName" class="form-control" placeholder="Dr. John" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Last Name</label>
+                                <input type="text" name="lastName" class="form-control" placeholder="Doe" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-semibold">Specialization</label>
+                                <input type="text" name="specialization" class="form-control" placeholder="Cardiology" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-semibold">Email Address</label>
+                                <input type="email" name="email" class="form-control" placeholder="john.doe@hospital.com" required>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <button type="submit" class="btn btn-primary w-100 py-2">Register Doctor</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="services/api.js"></script>
     <script src="js/main.js"></script>
-    <script>
-        async function loadDoctors() {
-            const tableBody = document.querySelector('#doctors-table tbody');
-            try {
-                const response = await axios.get('/doctors');
-                const doctors = response.data;
-                
-                if (doctors.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No doctors registered</td></tr>';
-                    return;
-                }
-
-                tableBody.innerHTML = doctors.map(d => `
-                    <tr>
-                        <td>#${d.id}</td>
-                        <td><div class="fw-bold">Dr. ${d.firstName} ${d.lastName}</div></td>
-                        <td><span class="badge bg-info-soft text-info">${d.specialization}</span></td>
-                        <td>${d.email}</td>
-                        <td><span class="badge bg-success-soft text-success">Available</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-light text-danger"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (error) {
-                console.error('Error loading doctors:', error);
-                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Failed to load medical staff</td></tr>';
-            }
-        }
-    </script>
 </body>
 </html>
