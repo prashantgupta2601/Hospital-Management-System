@@ -1,0 +1,50 @@
+# ──────────────────────────────────────────────
+# Maven / Java build artifacts
+# ──────────────────────────────────────────────
+backend/target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Maven wrapper (keep mvnw if present)
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ──────────────────────────────────────────────
+# IDE files
+# ──────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ──────────────────────────────────────────────
+# OS files
+# ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ──────────────────────────────────────────────
+# Node / Frontend
+# ──────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.env
+.env.local
+
+# ──────────────────────────────────────────────
+# Logs
+# ──────────────────────────────────────────────
+*.log
+logs/
