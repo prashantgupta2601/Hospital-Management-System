@@ -72,6 +72,8 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public auth endpoints
                 .requestMatchers("/api/auth/**").permitAll()
+                // WebSocket endpoints
+                .requestMatchers("/ws/**").permitAll()
                 // H2 console (dev only)
                 .requestMatchers("/h2-console/**").permitAll()
                 // Admin-only endpoints
