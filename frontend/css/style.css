@@ -237,7 +237,72 @@ body {
     #sidebar.active {
         left: 0;
     }
-    #content {
-        margin-left: 0;
-    }
+}
+
+/* --- AI Chatbot Widget --- */
+.chat-widget {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1050;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.chat-widget.active {
+    display: flex;
+    animation: slideUpFade 0.3s ease-out forwards;
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.chat-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5) !important;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    background: var(--bg-body);
+}
+
+.msg-bubble {
+    display: inline-block;
+    max-width: 85%;
+}
+
+.recommendation-card {
+    transition: var(--transition);
+}
+
+.recommendation-card:hover {
+    background: var(--bg-card) !important;
+    box-shadow: var(--shadow);
 }
