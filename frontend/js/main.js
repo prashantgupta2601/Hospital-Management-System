@@ -55,6 +55,9 @@ function initApp() {
 
 // Dashboard Functions
 async function loadDashboardStats() {
+    if (window.SkeletonLoader) {
+        window.SkeletonLoader.showStats();
+    }
     try {
         const [patients, doctors, appointments] = await Promise.all([
             PatientAPI.getAll(),
@@ -67,6 +70,7 @@ async function loadDashboardStats() {
         updateStat('total-appointments', appointments.data.length);
     } catch (error) {
         console.error('Error loading stats:', error);
+        if (window.Toast) window.Toast.error('Failed to load dashboard statistics');
     }
 }
 
@@ -78,6 +82,8 @@ function updateStat(id, value) {
 async function loadRecentAppointments() {
     const tableBody = document.querySelector('#recent-appointments-table tbody');
     if (!tableBody) return;
+
+    showLoading(tableBody, 5);
 
     try {
         const response = await AppointmentAPI.getAll();
@@ -99,7 +105,8 @@ async function loadRecentAppointments() {
         `).join('');
     } catch (error) {
         console.error('Error loading appointments:', error);
-        tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Failed to load data</td></tr>';
+        showError(tableBody, 5, 'Failed to load data');
+        if (window.Toast) window.Toast.error('Failed to load recent appointments');
     }
 }
 
@@ -144,6 +151,7 @@ async function loadPatientsPage() {
         `).join('');
     } catch (error) {
         showError(tableBody, 7, 'Failed to load patients');
+        if (window.Toast) window.Toast.error('Failed to load patients');
     }
 }
 
@@ -163,9 +171,18 @@ async function handleAddPatient(event) {
         form.reset();
         bootstrap.Modal.getInstance(document.getElementById('addPatientModal')).hide();
         loadPatientsPage();
-        alert('Patient added successfully!');
+        if (window.Toast) {
+            window.Toast.success('Patient registered successfully!');
+        } else {
+            alert('Patient added successfully!');
+        }
     } catch (error) {
-        alert(error.response?.data?.message || 'Failed to add patient');
+        const errMsg = error.response?.data?.message || 'Failed to add patient';
+        if (window.Toast) {
+            window.Toast.error(errMsg);
+        } else {
+            alert(errMsg);
+        }
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
@@ -203,6 +220,7 @@ async function loadDoctorsPage() {
         `).join('');
     } catch (error) {
         showError(tableBody, 6, 'Failed to load doctors');
+        if (window.Toast) window.Toast.error('Failed to load doctors');
     }
 }
 
@@ -221,9 +239,18 @@ async function handleAddDoctor(event) {
         form.reset();
         bootstrap.Modal.getInstance(document.getElementById('addDoctorModal')).hide();
         loadDoctorsPage();
-        alert('Doctor registered successfully!');
+        if (window.Toast) {
+            window.Toast.success('Doctor registered successfully!');
+        } else {
+            alert('Doctor registered successfully!');
+        }
     } catch (error) {
-        alert(error.response?.data?.message || 'Failed to register doctor');
+        const errMsg = error.response?.data?.message || 'Failed to register doctor';
+        if (window.Toast) {
+            window.Toast.error(errMsg);
+        } else {
+            alert(errMsg);
+        }
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Register Doctor';
@@ -262,6 +289,7 @@ async function loadAppointmentsPage() {
         `).join('');
     } catch (error) {
         showError(tableBody, 6, 'Failed to load appointments');
+        if (window.Toast) window.Toast.error('Failed to load appointments');
     }
 }
 
@@ -284,9 +312,18 @@ async function handleBookAppointment(event) {
         form.reset();
         bootstrap.Modal.getInstance(document.getElementById('bookAppointmentModal')).hide();
         loadAppointmentsPage();
-        alert('Appointment booked successfully!');
+        if (window.Toast) {
+            window.Toast.success('Appointment booked successfully!');
+        } else {
+            alert('Appointment booked successfully!');
+        }
     } catch (error) {
-        alert(error.response?.data?.message || 'Failed to book appointment');
+        const errMsg = error.response?.data?.message || 'Failed to book appointment';
+        if (window.Toast) {
+            window.Toast.error(errMsg);
+        } else {
+            alert(errMsg);
+        }
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Book Appointment';
@@ -298,14 +335,25 @@ async function updateStatus(id, status) {
     try {
         await AppointmentAPI.updateStatus(id, status);
         loadAppointmentsPage();
+        if (window.Toast) {
+            window.Toast.success(`Appointment marked as ${status.toLowerCase()}!`);
+        }
     } catch (error) {
-        alert('Failed to update status');
+        if (window.Toast) {
+            window.Toast.error('Failed to update status');
+        } else {
+            alert('Failed to update status');
+        }
     }
 }
 
 // --- Helper Functions ---
 function showLoading(element, colspan) {
-    element.innerHTML = `<tr><td colspan="${colspan}" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Loading...</td></tr>`;
+    if (window.SkeletonLoader) {
+        window.SkeletonLoader.showTable(element, colspan, 5);
+    } else {
+        element.innerHTML = `<tr><td colspan="${colspan}" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Loading...</td></tr>`;
+    }
 }
 
 function showError(element, colspan, message) {
@@ -318,7 +366,18 @@ window.deletePatient = async (id) => {
         try {
             await PatientAPI.delete(id);
             loadPatientsPage();
-        } catch (error) { alert('Failed to delete patient'); }
+            if (window.Toast) {
+                window.Toast.success('Patient deleted successfully');
+            } else {
+                alert('Patient deleted successfully');
+            }
+        } catch (error) {
+            if (window.Toast) {
+                window.Toast.error('Failed to delete patient');
+            } else {
+                alert('Failed to delete patient');
+            }
+        }
     }
 };
 
@@ -327,7 +386,18 @@ window.deleteDoctor = async (id) => {
         try {
             await DoctorAPI.delete(id);
             loadDoctorsPage();
-        } catch (error) { alert('Failed to delete doctor'); }
+            if (window.Toast) {
+                window.Toast.success('Doctor deleted successfully');
+            } else {
+                alert('Doctor deleted successfully');
+            }
+        } catch (error) {
+            if (window.Toast) {
+                window.Toast.error('Failed to delete doctor');
+            } else {
+                alert('Failed to delete doctor');
+            }
+        }
     }
 };
 
