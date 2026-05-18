@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -74,14 +75,14 @@
                     <p class="text-muted small mb-0">View and manage all registered patients.</p>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+                    <button class="btn btn-primary px-4 shadow-sm gsap-hover" data-bs-toggle="modal" data-bs-target="#addPatientModal">
                         <i class="fas fa-plus me-2"></i> Add Patient
                     </button>
                 </div>
             </div>
 
             <!-- Patients Table -->
-            <div class="card">
+            <div class="card" data-aos="fade-up">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="patients-table">
                         <thead>
@@ -160,8 +161,14 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- GSAP & AOS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <script src="services/api.js"></script>
     <script src="js/main.js"></script>
     <script src="js/chatbot.js"></script>
+    <script src="animations/animations.js"></script>
 </body>
 </html>

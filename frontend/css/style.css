@@ -306,3 +306,26 @@ body {
     background: var(--bg-card) !important;
     box-shadow: var(--shadow);
 }
+
+/* --- Animation Optimizations & Utilities --- */
+.gsap-card, .gsap-hover, .modal-content, .step-container {
+    will-change: transform, opacity;
+}
+
+/* Modal Steps for Appointments */
+.step-container {
+    display: none;
+}
+#appointment-step-1 {
+    display: block; /* Default to showing the first step */
+}
+#appointment-success {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+}
+#appointment-success i {
+    font-size: 3rem;
+    color: var(--success);
+    margin-bottom: 1rem;
+}

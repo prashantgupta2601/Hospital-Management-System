@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -68,20 +69,20 @@
 
         <!-- Page Content -->
         <div class="container-fluid p-4 fade-in">
-            <div class="row align-items-center mb-4">
+            <div class="row align-items-center mb-4" data-aos="slide-right">
                 <div class="col">
                     <h3 class="fw-bold mb-1">Clinic Appointments</h3>
                     <p class="text-muted small mb-0">Schedule and monitor all clinical visits.</p>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#bookAppointmentModal">
+                    <button class="btn btn-primary px-4 shadow-sm gsap-hover" data-bs-toggle="modal" data-bs-target="#bookAppointmentModal">
                         <i class="fas fa-calendar-plus me-2"></i> Book Appointment
                     </button>
                 </div>
             </div>
 
             <!-- Appointments Table -->
-            <div class="card">
+            <div class="card gsap-card" data-aos="fade-up">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="appointments-table">
                         <thead>
@@ -114,28 +115,47 @@
                     <h5 class="modal-title fw-bold">Book New Appointment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body p-4 overflow-hidden">
                     <form id="bookAppointmentForm" onsubmit="handleBookAppointment(event)">
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <label class="form-label small fw-semibold">Patient ID</label>
-                                <input type="number" name="patientId" class="form-control" placeholder="Enter Patient ID" required>
+                        <!-- Step 1 -->
+                        <div id="appointment-step-1" class="step-container">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-semibold">Patient ID</label>
+                                    <input type="number" name="patientId" id="step1PatientId" class="form-control" placeholder="Enter Patient ID">
+                                </div>
+                                <div class="col-md-12 mt-4">
+                                    <button type="button" id="btn-next-step" class="btn btn-primary w-100 py-2 gsap-hover">Next Step</button>
+                                </div>
                             </div>
-                            <div class="col-md-12">
-                                <label class="form-label small fw-semibold">Doctor ID</label>
-                                <input type="number" name="doctorId" class="form-control" placeholder="Enter Doctor ID" required>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div id="appointment-step-2" class="step-container">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-semibold">Doctor ID</label>
+                                    <input type="number" name="doctorId" class="form-control" placeholder="Enter Doctor ID" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-semibold">Appointment Date & Time</label>
+                                    <input type="datetime-local" name="appointmentDate" class="form-control" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-semibold">Reason / Notes</label>
+                                    <textarea name="notes" class="form-control" rows="3" placeholder="General checkup..."></textarea>
+                                </div>
+                                <div class="col-md-12 mt-4">
+                                    <button type="submit" id="btn-submit-appointment" class="btn btn-primary w-100 py-2 gsap-hover">Confirm Booking</button>
+                                </div>
                             </div>
-                            <div class="col-md-12">
-                                <label class="form-label small fw-semibold">Appointment Date & Time</label>
-                                <input type="datetime-local" name="appointmentDate" class="form-control" required>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label small fw-semibold">Reason / Notes</label>
-                                <textarea name="notes" class="form-control" rows="3" placeholder="General checkup..."></textarea>
-                            </div>
-                            <div class="col-md-12 mt-4">
-                                <button type="submit" class="btn btn-primary w-100 py-2">Book Appointment</button>
-                            </div>
+                        </div>
+
+                        <!-- Success Message -->
+                        <div id="appointment-success">
+                            <i class="fas fa-check-circle"></i>
+                            <h4 class="fw-bold mb-2">Booking Confirmed!</h4>
+                            <p class="text-muted small">The appointment has been successfully scheduled.</p>
                         </div>
                     </form>
                 </div>
@@ -148,9 +168,53 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    
+    <!-- GSAP & AOS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
     <script src="services/api.js"></script>
     <script src="services/websocket.js"></script>
     <script src="js/main.js"></script>
     <script src="js/chatbot.js"></script>
+    <script src="animations/animations.js"></script>
+    
+    <script>
+        // Intercept handleBookAppointment to show success animation
+        const originalHandleBookAppointment = window.handleBookAppointment;
+        if (originalHandleBookAppointment) {
+            window.handleBookAppointment = async function(event) {
+                // Prevent default again just in case
+                event.preventDefault();
+                try {
+                    await originalHandleBookAppointment(event);
+                    // On success, show animation
+                    if (window.AnimationManager) {
+                        window.AnimationManager.showAppointmentSuccess();
+                        // Reset modal after 3 seconds
+                        setTimeout(() => {
+                            const modalElement = document.getElementById('bookAppointmentModal');
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) modal.hide();
+                            
+                            // Reset state
+                            document.getElementById('appointment-step-1').style.display = 'block';
+                            document.getElementById('appointment-step-1').style.opacity = '1';
+                            document.getElementById('appointment-step-1').style.transform = 'none';
+                            
+                            document.getElementById('appointment-step-2').style.display = 'none';
+                            document.getElementById('appointment-step-2').style.opacity = '0';
+                            
+                            document.getElementById('appointment-success').style.display = 'none';
+                            
+                            document.getElementById('bookAppointmentForm').reset();
+                        }, 3000);
+                    }
+                } catch (e) {
+                    console.error("Booking failed", e);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
