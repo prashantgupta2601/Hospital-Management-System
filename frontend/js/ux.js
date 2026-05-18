@@ -1,9 +1,20 @@
 /**
- * HMS Frontend UX Polish Module
- * Implements transitions, skeleton loaders, custom GSAP toasts, and micro-interactions.
+ * HMS Frontend UX Polish Module & Production Experience Layer
+ * Implements transitions, skeletons, custom toasts, route guards, offline detection, and recovery screens.
  */
 
-// Global Toast System
+// ─── 0. Protected Route Guard ────────────────────────────────────────────────
+(function() {
+    const isLoginPage = window.location.pathname.endsWith('login.html');
+    const isLoggedIn = localStorage.getItem('hms_jwt') !== null;
+    
+    if (!isLoginPage && !isLoggedIn) {
+        console.warn('[Guard] Unauthorized access to protected route, redirecting to login.html');
+        window.location.replace('login.html');
+    }
+})();
+
+// ─── 1. Global Toast System (Enhanced with Actions) ─────────────────────────
 const Toast = {
     container: null,
 
@@ -16,7 +27,7 @@ const Toast = {
         document.body.appendChild(this.container);
     },
 
-    show(type, message) {
+    show(type, message, actionText = '', actionCallback = null) {
         this.init();
 
         const toast = document.createElement('div');
@@ -33,6 +44,7 @@ const Toast = {
             <div class="toast-body d-flex align-items-center gap-2">
                 <i class="fas ${icon} toast-icon"></i>
                 <div class="toast-message">${message}</div>
+                ${actionText ? `<button type="button" class="btn-toast-action">${actionText}</button>` : ''}
             </div>
             <button type="button" class="btn-close ms-auto" aria-label="Close"></button>
         `;
@@ -65,17 +77,27 @@ const Toast = {
         };
 
         closeBtn.addEventListener('click', dismiss);
-        setTimeout(dismiss, 3000);
+
+        // Handle CTA Action Button
+        if (actionText && actionCallback) {
+            const actionBtn = toast.querySelector('.btn-toast-action');
+            actionBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                actionCallback();
+                dismiss();
+            });
+        }
+
+        setTimeout(dismiss, 4000);
     },
 
     success(message) { this.show('success', message); },
-    error(message) { this.show('error', message); },
+    error(message, actionText = '', actionCallback = null) { this.show('error', message, actionText, actionCallback); },
     info(message) { this.show('info', message); }
 };
 
-// Skeleton Loaders Builder
+// ─── 2. Skeleton Loaders Builder ─────────────────────────────────────────────
 const SkeletonLoader = {
-    // Renders custom, sleek table skeletons
     showTable(element, colspan, rowsCount = 5) {
         if (!element) return;
         let rowsHtml = '';
@@ -105,7 +127,6 @@ const SkeletonLoader = {
         element.innerHTML = rowsHtml;
     },
 
-    // Shimmer placeholder for Dashboard Stats
     showStats() {
         const statsIds = ['total-patients', 'total-doctors', 'total-appointments'];
         statsIds.forEach(id => {
@@ -116,7 +137,6 @@ const SkeletonLoader = {
         });
     },
 
-    // Shimmer cards loader in case of card view grids
     showCards(element, cardsCount = 4) {
         if (!element) return;
         let cardsHtml = '';
@@ -135,15 +155,13 @@ const SkeletonLoader = {
     }
 };
 
-// Micro Interactions Builder
+// ─── 3. Micro Interactions ───────────────────────────────────────────────────
 const MicroInteractions = {
-    // Binds ripple effects on button/tab clicks
     initRipples() {
         document.body.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn, .tab-btn, .chat-btn');
+            const btn = e.target.closest('.btn, .tab-btn, .chat-btn, .btn-retry');
             if (!btn) return;
 
-            // Maintain relative positioning for ripples
             if (getComputedStyle(btn).position === 'static') {
                 btn.style.position = 'relative';
             }
@@ -158,7 +176,6 @@ const MicroInteractions = {
             circle.style.top = `${e.clientY - btn.getBoundingClientRect().top - radius}px`;
             circle.className = 'ripple-circle';
 
-            // Remove previous ripple
             const existingRipple = btn.querySelector('.ripple-circle');
             if (existingRipple) {
                 existingRipple.remove();
@@ -166,14 +183,12 @@ const MicroInteractions = {
 
             btn.appendChild(circle);
 
-            // Cleanup when animation ends
             circle.addEventListener('animationend', () => {
                 circle.remove();
             });
         });
     },
 
-    // Animates active sidebar loads using GSAP
     animateSidebar() {
         const activeLink = document.querySelector('#sidebar .nav-link.active');
         if (activeLink && typeof gsap !== 'undefined') {
@@ -185,15 +200,13 @@ const MicroInteractions = {
     }
 };
 
-// Page Transition Manager
+// ─── 4. Page Transition Manager ──────────────────────────────────────────────
 const PageTransitions = {
     init() {
-        // Trigger fade + slide in on DOM Load
         document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('page-loaded');
         });
 
-        // Intercept standard click navigations
         document.addEventListener('click', (e) => {
             const anchor = e.target.closest('a');
             if (!anchor) return;
@@ -211,7 +224,6 @@ const PageTransitions = {
             }, 350);
         });
 
-        // Trigger slide/fade out on browser tab/window close
         window.addEventListener('beforeunload', () => {
             document.body.classList.remove('page-loaded');
             document.body.classList.add('page-transitioning');
@@ -219,14 +231,144 @@ const PageTransitions = {
     }
 };
 
-// Global exports
+// ─── 5. Network Awareness System ─────────────────────────────────────────────
+const NetworkManager = {
+    banner: null,
+
+    init() {
+        this.createBanner();
+        window.addEventListener('online', () => this.updateStatus());
+        window.addEventListener('offline', () => this.updateStatus());
+        this.updateStatus();
+    },
+
+    createBanner() {
+        if (document.getElementById('offline-banner')) return;
+        this.banner = document.createElement('div');
+        this.banner.id = 'offline-banner';
+        this.banner.className = 'offline-banner';
+        this.banner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> You are currently offline. API requests are disabled in offline mode.`;
+        document.body.appendChild(this.banner);
+    },
+
+    updateStatus() {
+        if (navigator.onLine) {
+            this.banner?.classList.remove('show');
+            if (this.banner && this.banner.dataset.wasOffline === 'true') {
+                Toast.success('Connection restored. Back online!');
+                this.banner.dataset.wasOffline = 'false';
+            }
+        } else {
+            this.banner?.classList.add('show');
+            if (this.banner) {
+                this.banner.dataset.wasOffline = 'true';
+            }
+            Toast.error('You are offline. Network operations are paused.');
+        }
+    }
+};
+
+// ─── 6. Server Unavailable Screen ────────────────────────────────────────────
+const ServerUnavailableScreen = {
+    overlay: null,
+    retryCallback: null,
+
+    create() {
+        if (document.getElementById('server-unavailable-overlay')) return;
+        this.overlay = document.createElement('div');
+        this.overlay.id = 'server-unavailable-overlay';
+        this.overlay.className = 'server-unavailable-overlay';
+        this.overlay.innerHTML = `
+            <div class="server-unavailable-card">
+                <div class="server-unavailable-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h2 class="server-unavailable-title">Server Unavailable</h2>
+                <p class="server-unavailable-desc">We are having trouble connecting to our medical servers right now. Please verify your connection or click retry below.</p>
+                <button type="button" class="btn btn-retry" id="btn-server-retry">
+                    <i class="fas fa-sync-alt"></i> Try Again
+                </button>
+            </div>
+        `;
+        document.body.appendChild(this.overlay);
+
+        document.getElementById('btn-server-retry').addEventListener('click', () => {
+            const btn = document.getElementById('btn-server-retry');
+            const icon = btn.querySelector('i');
+            btn.disabled = true;
+            icon.classList.add('fa-spin');
+            
+            if (this.retryCallback) {
+                this.retryCallback().then(() => {
+                    this.hide();
+                }).catch(() => {
+                    Toast.error('Server connection failed. Retrying...');
+                }).finally(() => {
+                    btn.disabled = false;
+                    icon.classList.remove('fa-spin');
+                });
+            } else {
+                window.location.reload();
+            }
+        });
+    },
+
+    show(retryCb) {
+        this.create();
+        this.retryCallback = retryCb;
+        document.getElementById('server-unavailable-overlay').classList.add('show');
+    },
+
+    hide() {
+        const ov = document.getElementById('server-unavailable-overlay');
+        if (ov) {
+            ov.classList.remove('show');
+        }
+    }
+};
+
+// ─── 7. Inactivity Auto-Logout Tracker ────────────────────────────────────────
+const InactivityTracker = {
+    timeoutId: null,
+    duration: 5 * 60 * 1000, // 5 minutes in ms
+    
+    init() {
+        if (window.location.pathname.endsWith('login.html')) return;
+        this.reset();
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+        events.forEach(e => {
+            document.addEventListener(e, () => this.reset(), { passive: true });
+        });
+    },
+    
+    reset() {
+        if (this.timeoutId) clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(() => this.logout(), this.duration);
+    },
+    
+    logout() {
+        console.warn('[InactivityTracker] User logged out due to inactivity');
+        if (typeof AuthService !== 'undefined') {
+            AuthService.logout('inactive');
+        } else {
+            localStorage.removeItem('hms_jwt');
+            localStorage.removeItem('hms_user');
+            window.location.href = 'login.html?reason=inactive';
+        }
+    }
+};
+
+// ─── 8. Global Exports & Run ─────────────────────────────────────────────────
 window.Toast = Toast;
 window.SkeletonLoader = SkeletonLoader;
 window.MicroInteractions = MicroInteractions;
+window.NetworkManager = NetworkManager;
+window.ServerUnavailableScreen = ServerUnavailableScreen;
 
-// Auto-run transitions and bindings on script injection
 PageTransitions.init();
 document.addEventListener('DOMContentLoaded', () => {
     MicroInteractions.initRipples();
     MicroInteractions.animateSidebar();
+    NetworkManager.init();
+    InactivityTracker.init();
 });

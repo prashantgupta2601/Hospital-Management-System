@@ -22,10 +22,17 @@ const AuthService = {
 
     hasRole: (role) => AuthService.getRoles().includes(role),
 
-    logout: () => {
+    logout: (reason = '') => {
         AuthService.removeToken();
         AuthService.removeUser();
-        window.location.href = '/login.html';
+        if (window.AppState) {
+            window.AppState.invalidateAll();
+        }
+        let redirectUrl = 'login.html';
+        if (reason) {
+            redirectUrl += `?reason=${encodeURIComponent(reason)}`;
+        }
+        window.location.href = redirectUrl;
     },
 
     // POST /api/auth/login
@@ -60,8 +67,16 @@ const apiClient = axios.create({
     headers: { 'Content-Type': 'application/json' }
 });
 
-// Request Interceptor — attach JWT to every request
+// Request Interceptor — attach JWT to every request & block if offline
 apiClient.interceptors.request.use(config => {
+    // Detect Offline Mode and immediately reject call
+    if (!navigator.onLine) {
+        console.warn('[apiClient] Blocked request due to offline status:', config.url);
+        const error = new axios.Cancel('You are offline. API requests are disabled in offline mode.');
+        error.isOffline = true;
+        return Promise.reject(error);
+    }
+
     const token = AuthService.getToken();
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
@@ -70,19 +85,63 @@ apiClient.interceptors.request.use(config => {
     return config;
 }, error => Promise.reject(error));
 
-// Response Interceptor — handle 401/403
+// Response Interceptor — handle 401/403/5xx and network failures
 apiClient.interceptors.response.use(response => {
+    // If successfully resolved, ensure the global server unavailable overlay is hidden
+    if (window.ServerUnavailableScreen) {
+        window.ServerUnavailableScreen.hide();
+    }
     return response;
 }, error => {
+    // Check if offline cancelation
+    if (axios.isCancel(error) && error.message.includes('offline')) {
+        if (window.Toast) {
+            window.Toast.error('You are offline. Action cannot be processed.');
+        }
+        return Promise.reject(error);
+    }
+
     const status = error.response?.status;
+    const config = error.config;
+
+    // Handle Server Down or Network Connection Error
+    const isNetworkError = error.code === 'ERR_NETWORK' || error.message === 'Network Error' || (status >= 502 && status <= 504);
+    
+    if (isNetworkError && config && !config._retry) {
+        config._retry = true; // prevent infinite loops
+        console.error('[apiClient] Network Connection Failure Detected.');
+        
+        if (window.Toast) {
+            window.Toast.error('Server unavailable. Retrying operation...', 'Retry', () => {
+                return apiClient(config);
+            });
+        }
+
+        if (window.ServerUnavailableScreen) {
+            // Show overlay screen with retry option
+            window.ServerUnavailableScreen.show(() => {
+                return apiClient(config);
+            });
+        }
+        return Promise.reject(error);
+    }
+
     if (status === 401) {
-        console.warn('Unauthorized — redirecting to login');
-        AuthService.logout();
+        console.warn('Unauthorized — session expired, redirecting to login');
+        AuthService.logout('expired');
     } else if (status === 403) {
         console.error('Forbidden — insufficient permissions');
-        alert('You do not have permission to perform this action.');
+        if (window.Toast) {
+            window.Toast.error('You do not have permission to perform this action.');
+        } else {
+            alert('You do not have permission to perform this action.');
+        }
     } else {
         console.error('API Error:', error.response || error.message);
+        // Map general API failures to Toast if enabled
+        if (window.Toast && error.response?.data?.message) {
+            window.Toast.error(error.response.data.message);
+        }
     }
     return Promise.reject(error);
 });

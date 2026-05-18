@@ -376,6 +376,23 @@
         window.location.href = 'index.html';
     }
 
+    // Modern Entrance Animations
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof gsap !== 'undefined') {
+            gsap.fromTo('.brand', { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' });
+            gsap.fromTo('.card', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.15 });
+        }
+
+        // Process session expiry and inactivity notifications
+        const params = new URLSearchParams(window.location.search);
+        const reason = params.get('reason');
+        if (reason === 'expired') {
+            showAlert('Your session has expired. Please sign in again.', 'error');
+        } else if (reason === 'inactive') {
+            showAlert('Logged out due to 5 minutes of inactivity.', 'error');
+        }
+    });
+
     function switchTab(tab) {
         const isLogin = tab === 'login';
         document.getElementById('loginPanel').classList.toggle('active', isLogin);
