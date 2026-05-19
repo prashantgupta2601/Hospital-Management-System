@@ -78,6 +78,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 // Admin-only endpoints
                 .requestMatchers("/api/billing/**").hasRole("ADMIN")
+                // Analytics
+                .requestMatchers("/api/analytics/**").hasAnyRole("ADMIN", "DOCTOR")
                 // Doctor and Admin
                 .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "DOCTOR")
                 // Doctor, Admin (patient management)
