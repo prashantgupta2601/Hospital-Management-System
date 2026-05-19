@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | PG Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/ux-polish.css">
+    <style>
+        .stats-card {
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="dark"] .stats-card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+        .stats-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+        .icon-blue { background: rgba(67, 97, 238, 0.1); color: var(--primary); }
+        .icon-green { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
+        .icon-purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+        .icon-orange { background: rgba(251, 146, 60, 0.1); color: #fb923c; }
+
+        .chart-card {
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: box-shadow 0.3s ease;
+        }
+        .chart-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        }
+        [data-theme="dark"] .chart-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .chart-container {
+            position: relative;
+            height: 320px;
+            width: 100%;
+        }
+        .last-updated {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .pulse-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+            animation: pulse 1.6s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-heart-pulse me-2"></i> PG CARE</h4>
+        </div>
+        <div class="nav flex-column mt-4">
+            <a class="nav-link" href="../index.html">
+                <i class="fas fa-grid-2"></i> Dashboard
+            </a>
+            <a class="nav-link" href="../patients.html">
+                <i class="fas fa-user-injured"></i> Patients
+            </a>
+            <a class="nav-link" href="../doctors.html">
+                <i class="fas fa-user-md"></i> Doctors
+            </a>
+            <a class="nav-link" href="../appointments.html">
+                <i class="fas fa-calendar-alt"></i> Appointments
+            </a>
+            <a class="nav-link active" href="analytics.html">
+                <i class="fas fa-chart-line"></i> Analytics
+            </a>
+            <div class="mt-auto mb-4">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid p-0">
+                <button type="button" id="sidebarCollapse" class="btn border-0 d-lg-none me-3">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="ms-auto d-flex align-items-center">
+                    <div id="theme-toggle" class="me-3">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="35" height="35">
+                            <div class="d-none d-sm-block">
+                                <p class="mb-0 text-main fw-semibold small">Alex Johnson</p>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
+                            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container-fluid p-4 fade-in">
+            <!-- Header -->
+            <div class="row align-items-center mb-4">
+                <div class="col">
+                    <h3 class="fw-bold mb-1">Analytics & Insights</h3>
+                    <p class="text-muted small mb-0 d-flex align-items-center gap-2">
+                        <span class="pulse-indicator"></span>
+                        Real-time clinical and financial performance reports
+                    </p>
+                </div>
+                <div class="col-auto d-flex align-items-center gap-3">
+                    <span id="last-updated-time" class="last-updated">Last updated: Just now</span>
+                    <button id="refresh-analytics" class="btn btn-primary px-4 shadow-sm gsap-hover">
+                        <i class="fas fa-sync-alt me-2"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="row g-4 mb-4" id="stats-row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card" data-aos="fade-up" data-aos-delay="50">
+                        <div class="stats-card-icon icon-blue">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <span class="text-muted small fw-medium d-block mb-1">Total Patients</span>
+                        <h3 class="fw-bold text-main mb-0" id="stat-patients">
+                            <span class="skeleton" style="width: 60px; height: 32px; border-radius: 8px;"></span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stats-card-icon icon-green">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <span class="text-muted small fw-medium d-block mb-1">Active Doctors</span>
+                        <h3 class="fw-bold text-main mb-0" id="stat-doctors">
+                            <span class="skeleton" style="width: 60px; height: 32px; border-radius: 8px;"></span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card" data-aos="fade-up" data-aos-delay="150">
+                        <div class="stats-card-icon icon-purple">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <span class="text-muted small fw-medium d-block mb-1">Appointments</span>
+                        <h3 class="fw-bold text-main mb-0" id="stat-appointments">
+                            <span class="skeleton" style="width: 60px; height: 32px; border-radius: 8px;"></span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stats-card-icon icon-orange">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <span class="text-muted small fw-medium d-block mb-1">Total Revenue</span>
+                        <h3 class="fw-bold text-main mb-0" id="stat-revenue">
+                            <span class="skeleton" style="width: 60px; height: 32px; border-radius: 8px;"></span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="chart-card" data-aos="fade-up" data-aos-delay="250">
+                        <h5 class="fw-bold text-main mb-4"><i class="fas fa-chart-line text-primary me-2"></i>Patient Growth Trend</h5>
+                        <div class="chart-container" id="patient-growth-container">
+                            <canvas id="patientGrowthChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="chart-card" data-aos="fade-up" data-aos-delay="300">
+                        <h5 class="fw-bold text-main mb-4"><i class="fas fa-chart-pie text-purple me-2"></i>Doctor Workload</h5>
+                        <div class="chart-container" id="doctor-workload-container">
+                            <canvas id="doctorWorkloadChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="chart-card" data-aos="fade-up" data-aos-delay="350">
+                        <h5 class="fw-bold text-main mb-4"><i class="fas fa-chart-bar text-success me-2"></i>Appointment Volume per Day</h5>
+                        <div class="chart-container" id="appointments-per-day-container">
+                            <canvas id="appointmentsPerDayChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- GSAP & AOS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- HMS Core Modules -->
+    <script src="../services/api.js"></script>
+    <script src="../js/ux.js"></script>
+    <script src="../js/state.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/chatbot.js"></script>
+    <script src="../animations/animations.js"></script>
+    <script src="../js/analytics.js"></script>
+    
+    <script>
+        // Guard to ensure user is logged in
+        if (!AuthService.isLoggedIn()) { 
+            window.location.href = '../login.html'; 
+        }
+    </script>
+</body>
+</html>

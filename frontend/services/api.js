@@ -172,3 +172,11 @@ const AppointmentAPI = {
     updateStatus:   (id, status) => apiClient.patch(`/appointments/${id}/status?status=${status}`),
     delete:         (id)         => apiClient.delete(`/appointments/${id}`)
 };
+
+const AnalyticsAPI = {
+    getAppointmentsPerDay: () => apiClient.get('/analytics/appointments-per-day'),
+    getDoctorWorkload:     () => apiClient.get('/analytics/doctor-workload'),
+    getPatientGrowth:      () => apiClient.get('/analytics/patient-growth'),
+    getDashboardStats:     () => apiClient.get('/analytics/dashboard-stats'),
+    getSummary:            () => apiClient.get('/analytics/summary')
+};

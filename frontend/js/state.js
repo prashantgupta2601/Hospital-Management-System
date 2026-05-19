@@ -8,21 +8,24 @@ const AppState = {
     cache: {
         patients: null,
         doctors: null,
-        appointments: null
+        appointments: null,
+        analytics: null
     },
 
     // Cache timestamps (last fetched)
     lastFetch: {
         patients: 0,
         doctors: 0,
-        appointments: 0
+        appointments: 0,
+        analytics: 0
     },
 
     // Active fetching promises to coalesce duplicate calls
     fetchPromises: {
         patients: null,
         doctors: null,
-        appointments: null
+        appointments: null,
+        analytics: null
     },
 
     // Cache duration: 30 seconds
@@ -126,6 +129,36 @@ const AppState = {
         return this.fetchPromises.appointments;
     },
 
+    // ─── Analytics Caching & Getters ─────────────────────────────────────────
+    async getAnalytics(forceFetch = false) {
+        const now = Date.now();
+        const isCacheValid = this.cache.analytics && (now - this.lastFetch.analytics < this.cacheTTL);
+
+        if (isCacheValid && !forceFetch) {
+            console.log('[AppState] Returning cached analytics');
+            return { data: this.cache.analytics };
+        }
+
+        if (this.fetchPromises.analytics) {
+            console.log('[AppState] Deduplicating analytics fetch...');
+            return this.fetchPromises.analytics;
+        }
+
+        console.log('[AppState] Fetching analytics from API...');
+        this.fetchPromises.analytics = (async () => {
+            try {
+                const response = await AnalyticsAPI.getSummary();
+                this.cache.analytics = response.data;
+                this.lastFetch.analytics = Date.now();
+                return response;
+            } finally {
+                this.fetchPromises.analytics = null;
+            }
+        })();
+
+        return this.fetchPromises.analytics;
+    },
+
     // ─── Cache Invalidation & Mutations ──────────────────────────────────────
     invalidate(moduleName) {
         console.log(`[AppState] Invalidating cache for ${moduleName}`);
@@ -137,6 +170,7 @@ const AppState = {
         this.invalidate('patients');
         this.invalidate('doctors');
         this.invalidate('appointments');
+        this.invalidate('analytics');
     },
 
     // ─── Optimistic Mutations & Rollbacks ────────────────────────────────────
