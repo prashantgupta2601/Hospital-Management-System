@@ -3,369 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HMS – Login</title>
-    <meta name="description" content="Secure login portal for Hospital Management System staff and patients.">
+    <title>HMS Portal – Vintage Luxury Login</title>
+    <meta name="description" content="Secure premium portal for Hospital Management System staff and patients.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/ux-polish.css">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --primary:       #3b82f6;
-            --primary-dark:  #2563eb;
-            --accent:        #06b6d4;
-            --bg:            #0f172a;
-            --surface:       #1e293b;
-            --surface2:      #334155;
-            --text:          #f1f5f9;
-            --text-muted:    #94a3b8;
-            --border:        rgba(255,255,255,0.08);
-            --glass-bg:      rgba(30,41,59,0.7);
-            --error:         #f87171;
-            --success:       #4ade80;
-            --radius:        16px;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        /* animated gradient orbs */
-        body::before, body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.25;
-            pointer-events: none;
-        }
-        body::before {
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, #3b82f6, transparent);
-            top: -150px; left: -150px;
-            animation: drift 8s ease-in-out infinite alternate;
-        }
-        body::after {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, #06b6d4, transparent);
-            bottom: -100px; right: -100px;
-            animation: drift 10s ease-in-out infinite alternate-reverse;
-        }
-        @keyframes drift {
-            from { transform: translate(0, 0); }
-            to   { transform: translate(30px, 30px); }
-        }
-
-        .login-wrapper {
-            width: 100%;
-            max-width: 440px;
-            padding: 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Branding */
-        .brand {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .brand-icon {
-            width: 64px; height: 64px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: white;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(59,130,246,0.35);
-        }
-        .brand h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: -0.02em;
-        }
-        .brand p {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            margin-top: 4px;
-        }
-
-        /* Card */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.4);
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            background: var(--surface);
-            border-radius: 10px;
-            padding: 4px;
-            margin-bottom: 28px;
-            gap: 4px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 8px 0;
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            color: var(--text-muted);
-            font-family: inherit;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all .25s;
-        }
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(59,130,246,0.4);
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 18px;
-        }
-        label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .input-wrap {
-            position: relative;
-        }
-        .input-wrap i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1rem;
-            pointer-events: none;
-        }
-        input[type="text"], input[type="email"], input[type="password"], select {
-            width: 100%;
-            padding: 11px 14px 11px 40px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 0.9rem;
-            transition: border-color .2s, box-shadow .2s;
-            outline: none;
-            appearance: none;
-        }
-        select { padding-left: 40px; cursor: pointer; }
-        input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-        }
-
-        /* Toggle Password */
-        .toggle-pw {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0;
-            transition: color .2s;
-        }
-        .toggle-pw:hover { color: var(--primary); }
-
-        /* Submit Button */
-        .btn-submit {
-            width: 100%;
-            padding: 13px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-family: inherit;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity .2s, transform .15s, box-shadow .2s;
-            margin-top: 8px;
-            box-shadow: 0 4px 20px rgba(59,130,246,0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(59,130,246,0.45); }
-        .btn-submit:active { transform: translateY(0); }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-        /* Alert */
-        .alert {
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.875rem;
-            margin-bottom: 18px;
-            display: none;
-            align-items: flex-start;
-            gap: 8px;
-            animation: slideIn .2s ease;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .alert.show { display: flex; }
-        .alert-error   { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.3); color: var(--error); }
-        .alert-success { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: var(--success); }
-
-        /* Spinner */
-        .spinner {
-            width: 18px; height: 18px;
-            border: 2px solid rgba(255,255,255,0.4);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin .6s linear infinite;
-            display: none;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Footer */
-        .card-footer {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-        }
-
-        /* Panels */
-        .panel { display: none; }
-        .panel.active { display: block; }
-    </style>
+    <link rel="stylesheet" href="css/login-luxury.css">
 </head>
 <body>
 
-<div class="login-wrapper">
-    <!-- Brand -->
-    <div class="brand">
-        <div class="brand-icon"><i class="bi bi-hospital"></i></div>
-        <h1>HMS Portal</h1>
-        <p>Hospital Management System</p>
-    </div>
+<!-- Vignette framing the screen -->
+<div class="vignette"></div>
 
-    <!-- Card -->
-    <div class="card">
-        <!-- Tabs -->
-        <div class="tabs">
-            <button id="tabLogin"    class="tab-btn active" onclick="switchTab('login')">Sign In</button>
-            <button id="tabRegister" class="tab-btn"        onclick="switchTab('register')">Register</button>
-        </div>
+<!-- Drifting gold particles & trail canvas -->
+<canvas id="particle-canvas"></canvas>
 
-        <!-- Alert -->
-        <div id="alertBox" class="alert"></div>
+<!-- Parallax atmospheric layers -->
+<div class="atmospheric-container">
+    <div class="ambient-orb orb-gold" id="orb-gold"></div>
+    <div class="ambient-orb orb-blue" id="orb-blue"></div>
+    <div class="parallax-hospital" id="para-hospital" style="background-image: url('assets/luxury_hospital.png');"></div>
+    <div class="parallax-pattern-glow" id="para-pattern-glow"></div>
+    <div class="parallax-pattern" id="para-pattern"></div>
+    <div class="light-streak"></div>
+</div>
 
-        <!-- ── Login Panel ── -->
-        <div id="loginPanel" class="panel active">
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="loginUsername">Username</label>
-                    <div class="input-wrap">
-                        <i class="bi bi-person"></i>
-                        <input id="loginUsername" type="text" placeholder="Enter your username" required autocomplete="username">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="input-wrap">
-                        <i class="bi bi-lock"></i>
-                        <input id="loginPassword" type="password" placeholder="Enter your password" required autocomplete="current-password">
-                        <button type="button" class="toggle-pw" onclick="togglePw('loginPassword', this)" tabindex="-1">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <button id="loginBtn" type="submit" class="btn-submit">
-                    <div id="loginSpinner" class="spinner"></div>
-                    <span id="loginBtnText"><i class="bi bi-box-arrow-in-right"></i> Sign In</span>
-                </button>
-            </form>
-        </div>
+<!-- Main branding outside the card for premium spacious layout -->
+<div class="brand">
+    <div class="brand-icon"><i class="bi bi-hospital"></i></div>
+    <h1>HMS Portal</h1>
+    <p>Hospital Management System</p>
+</div>
 
-        <!-- ── Register Panel ── -->
-        <div id="registerPanel" class="panel">
-            <form id="registerForm" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label for="regUsername">Username</label>
-                    <div class="input-wrap">
-                        <i class="bi bi-person"></i>
-                        <input id="regUsername" type="text" placeholder="Choose a username" required autocomplete="username">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="regEmail">Email</label>
-                    <div class="input-wrap">
-                        <i class="bi bi-envelope"></i>
-                        <input id="regEmail" type="email" placeholder="your@email.com" required autocomplete="email">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="regPassword">Password</label>
-                    <div class="input-wrap">
-                        <i class="bi bi-lock"></i>
-                        <input id="regPassword" type="password" placeholder="Min. 6 characters" required autocomplete="new-password">
-                        <button type="button" class="toggle-pw" onclick="togglePw('regPassword', this)" tabindex="-1">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="regRole">Role</label>
-                    <div class="input-wrap">
-                        <i class="bi bi-shield-check"></i>
-                        <select id="regRole">
-                            <option value="patient">Patient</option>
-                            <option value="doctor">Doctor</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                </div>
-                <button id="regBtn" type="submit" class="btn-submit">
-                    <div id="regSpinner" class="spinner"></div>
-                    <span id="regBtnText"><i class="bi bi-person-plus"></i> Create Account</span>
-                </button>
-            </form>
-        </div>
+<!-- Card Wrapper for glowing border -->
+<div class="login-container">
+    <div class="card-border-wrapper">
+        <div class="card">
+            <!-- Ornamental corners -->
+            <div class="card-corner corner-tl"></div>
+            <div class="card-corner corner-tr"></div>
+            <div class="card-corner corner-bl"></div>
+            <div class="card-corner corner-br"></div>
 
-        <div class="card-footer">
-            &copy; 2025 Hospital Management System &mdash; All rights reserved
+            <!-- Tabs -->
+            <div class="tabs">
+                <button id="tabLogin" class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+                <button id="tabRegister" class="tab-btn" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <!-- Alert Box -->
+            <div id="alertBox" class="alert"></div>
+
+            <!-- ── Sign In Panel ── -->
+            <div id="loginPanel" class="panel active">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginUsername">Username</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-person"></i>
+                            <input id="loginUsername" type="text" placeholder="Enter your username" required autocomplete="username">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-lock"></i>
+                            <input id="loginPassword" type="password" placeholder="Enter your password" required autocomplete="current-password">
+                            <button type="button" class="toggle-pw" onclick="togglePw('loginPassword', this)" tabindex="-1">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button id="loginBtn" type="submit" class="btn-submit">
+                        <div id="loginSpinner" class="spinner"></div>
+                        <span id="loginBtnText"><i class="bi bi-box-arrow-in-right"></i> Sign In</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- ── Register Panel ── -->
+            <div id="registerPanel" class="panel">
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="regUsername">Username</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-person"></i>
+                            <input id="regUsername" type="text" placeholder="Choose a username" required autocomplete="username">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-envelope"></i>
+                            <input id="regEmail" type="email" placeholder="your@email.com" required autocomplete="email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-lock"></i>
+                            <input id="regPassword" type="password" placeholder="Min. 6 characters" required autocomplete="new-password">
+                            <button type="button" class="toggle-pw" onclick="togglePw('regPassword', this)" tabindex="-1">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regRole">Role</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-shield-check"></i>
+                            <select id="regRole">
+                                <option value="patient">Patient</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="regBtn" type="submit" class="btn-submit">
+                        <div id="regSpinner" class="spinner"></div>
+                        <span id="regBtnText"><i class="bi bi-person-plus"></i> Create Account</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="card-footer">
+                &copy; 2026 HMS Portal &mdash; Vintage Luxury Healthcare
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Bottom Section: Divider & Key Features -->
+<div class="bottom-section">
+    <div class="divider-container">
+        <div class="divider-line"></div>
+        <div class="divider-center"></div>
+        <div class="divider-line"></div>
+    </div>
+    <div class="features-row">
+        <div class="feature-badge">
+            <div class="feature-icon-circle"><i class="bi bi-shield-lock"></i></div>
+            <div class="feature-title">Secure & Compliant</div>
+            <div class="feature-sub">Premium grade encryption</div>
+        </div>
+        <div class="feature-badge">
+            <div class="feature-icon-circle"><i class="bi bi-activity"></i></div>
+            <div class="feature-title">Efficient Workflow</div>
+            <div class="feature-sub">Optimized practitioner tools</div>
+        </div>
+        <div class="feature-badge">
+            <div class="feature-icon-circle"><i class="bi bi-bar-chart-line"></i></div>
+            <div class="feature-title">Smart Analytics</div>
+            <div class="feature-sub">Deep predictive insights</div>
+        </div>
+        <div class="feature-badge">
+            <div class="feature-icon-circle"><i class="bi bi-heart-pulse"></i></div>
+            <div class="feature-title">Patient Centric</div>
+            <div class="feature-sub">Care-oriented technology</div>
+        </div>
+    </div>
+</div>
+
+<!-- JS imports -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="services/api.js"></script>
@@ -376,11 +175,12 @@
         window.location.href = 'index.html';
     }
 
-    // Modern Entrance Animations
+    // Modern Entrance Animations with GSAP
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof gsap !== 'undefined') {
-            gsap.fromTo('.brand', { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' });
-            gsap.fromTo('.card', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.15 });
+            gsap.fromTo('.brand', { y: -45, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' });
+            gsap.fromTo('.login-container', { y: 45, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.18 });
+            gsap.fromTo('.bottom-section', { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power2.out', delay: 0.4 });
         }
 
         // Process session expiry and inactivity notifications
@@ -393,6 +193,158 @@
         }
     });
 
+    // ── HIGH PERFORMANCE CANVAS DRIFTING GOLD PARTICLES & RESPONSIVE CURSOR TRAIL ──
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const trail = [];
+
+    class GoldParticle {
+        constructor() {
+            this.reset();
+            this.y = Math.random() * height; // Distribute on startup
+        }
+        
+        reset() {
+            this.x = Math.random() * width;
+            this.y = height + 12;
+            this.size = Math.random() * 1.8 + 0.6;
+            this.speedY = Math.random() * 0.35 + 0.12;
+            this.speedX = Math.random() * 0.16 - 0.08;
+            this.alpha = Math.random() * 0.5 + 0.2;
+            this.angle = Math.random() * Math.PI * 2;
+            this.waveSpeed = Math.random() * 0.015 + 0.005;
+        }
+        
+        update() {
+            this.y -= this.speedY;
+            this.angle += this.waveSpeed;
+            this.x += Math.sin(this.angle) * 0.22 + this.speedX;
+            
+            if (this.y < -12 || this.x < -12 || this.x > width + 12) {
+                this.reset();
+            }
+        }
+        
+        draw() {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 175, 55, ${this.alpha})`;
+            ctx.shadowBlur = this.size * 3.5;
+            ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    class TrailParticle {
+        constructor(x, y) {
+            this.x = x + (Math.random() * 6 - 3);
+            this.y = y + (Math.random() * 6 - 3);
+            this.size = Math.random() * 2.8 + 1.0;
+            this.alpha = 1.0;
+            this.decay = Math.random() * 0.026 + 0.016;
+            this.speedX = Math.random() * 0.7 - 0.35;
+            this.speedY = Math.random() * 0.7 - 0.35;
+        }
+        
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.alpha -= this.decay;
+        }
+        
+        draw() {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(243, 229, 171, ${this.alpha})`;
+            ctx.shadowBlur = this.size * 4;
+            ctx.shadowColor = 'rgba(212, 175, 55, 0.9)';
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    // Initialize 65 ambient particles
+    for (let i = 0; i < 65; i++) {
+        particles.push(new GoldParticle());
+    }
+
+    // Mouse coordinates tracker for Trail & Interactive Parallax
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+    let lastMouseX = mouseX;
+    let lastMouseY = mouseY;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Parallax Movement Calculations
+        const xOffset = (width / 2 - mouseX) / 28;
+        const yOffset = (height / 2 - mouseY) / 28;
+        
+        const paraHospital = document.getElementById('para-hospital');
+        const paraPattern = document.getElementById('para-pattern');
+        const paraPatternGlow = document.getElementById('para-pattern-glow');
+        const orbGold = document.getElementById('orb-gold');
+        const orbBlue = document.getElementById('orb-blue');
+        
+        if (paraHospital) paraHospital.style.transform = `translate3d(${xOffset * 0.45}px, ${yOffset * 0.45}px, 0)`;
+        if (paraPattern) paraPattern.style.transform = `translate3d(${xOffset * -0.6}px, ${yOffset * -0.6}px, 0)`;
+        if (paraPatternGlow) paraPatternGlow.style.transform = `translate3d(${xOffset * -0.35}px, ${yOffset * -0.35}px, 0)`;
+        if (orbGold) orbGold.style.transform = `translate3d(${xOffset * 0.25}px, ${yOffset * 0.25}px, 0)`;
+        if (orbBlue) orbBlue.style.transform = `translate3d(${xOffset * -0.25}px, ${yOffset * -0.25}px, 0)`;
+
+        // Cursor Trail generation
+        const dist = Math.hypot(mouseX - lastMouseX, mouseY - lastMouseY);
+        if (dist > 3) {
+            for (let i = 0; i < 2; i++) {
+                trail.push(new TrailParticle(mouseX, mouseY));
+            }
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+        }
+    });
+
+    // Unified Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Drifting gold dots
+        for (let p of particles) {
+            p.update();
+            p.draw();
+        }
+        
+        // Interactive cursor trail sparks
+        for (let i = trail.length - 1; i >= 0; i--) {
+            const t = trail[i];
+            t.update();
+            if (t.alpha <= 0) {
+                trail.splice(i, 1);
+            } else {
+                t.draw();
+            }
+        }
+        
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+
+    // ── ACTIVE HANDLERS & API UTILITIES ──
     function switchTab(tab) {
         const isLogin = tab === 'login';
         document.getElementById('loginPanel').classList.toggle('active', isLogin);
@@ -407,6 +359,7 @@
         box.className = `alert alert-${type} show`;
         box.innerHTML = `<i class="bi bi-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${msg}`;
     }
+    
     function hideAlert() {
         document.getElementById('alertBox').className = 'alert';
     }

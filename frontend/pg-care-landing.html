@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PG Care – Premium Hospital Management System</title>
+    <meta name="description" content="Sovereign medical command center suite designed for elite health institutions. Experience seamless EMR automation, smart scheduling, clinical analytics, and robust role-based safety." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+    
+    <!-- Premium Stylesheet -->
+    <link rel="stylesheet" href="css/landing-luxury.css" />
+</head>
+<body>
+
+    <!-- Premium Vignette Framing -->
+    <div class="vignette"></div>
+
+    <!-- Drifting Gold Particles Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Parallax Atmospheric Layers (Ambient Orbs & Light Streaks) -->
+    <div class="atmospheric-container">
+        <div class="ambient-orb orb-gold-hero" id="orb-gold-hero"></div>
+        <div class="ambient-orb orb-blue-hero" id="orb-blue-hero"></div>
+        <div class="ambient-orb orb-gold-mid" id="orb-gold-mid"></div>
+        <div class="ambient-orb orb-blue-mid" id="orb-blue-mid"></div>
+        <div class="light-streak"></div>
+        <div class="light-streak-reverse"></div>
+    </div>
+
+    <!-- ─── 1. NAVBAR (Sticky Glassmorphism) ─── -->
+    <nav class="luxury-nav" id="navbar">
+        <a href="#home" class="nav-brand">
+            <i class="fa-solid fa-staff-aesculapius nav-logo-icon"></i>
+            <span class="nav-title">PG Care</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#modules">Modules</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="login.html" class="btn-gold-glow">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+        </div>
+    </nav>
+
+    <!-- ─── 2. HERO SECTION (Cinematic Split Layout) ─── -->
+    <section class="hero-section" id="home">
+        <div class="hero-grid">
+            <!-- Left Column: Blurry Cinematic Hospital Asset -->
+            <div class="hero-left-col">
+                <div class="hero-image-wrapper">
+                    <img src="assets/luxury_hospital.png" alt="PG Care Sovereign Hospital" id="hero-hospital-img" />
+                    <div class="hero-image-glow-overlay"></div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Abstract Patterns & Premium SaaS Titles -->
+            <div class="hero-right-col">
+                <div class="medical-abstract-pattern"></div>
+                <div class="hero-center-content">
+                    <div class="hero-badge-wrap">
+                        <div class="hero-badge-circle">
+                            <i class="bi bi-hospital"></i>
+                        </div>
+                    </div>
+                    <h1 class="hero-title-main">HMS Portal</h1>
+                    <h2 class="hero-subtitle">Next-Generation Clinical Commander</h2>
+                    <p class="hero-description">
+                        An elite, dark-mode medical orchestration engine designed for premium healthcare institutions. Seamlessly synchronize patient vitals, active physician scheduling, compliance audits, and real-time operational diagnostics with ultimate royal prestige.
+                    </p>
+                    <div class="hero-ctas">
+                        <a href="login.html" class="btn-gold-glow">
+                            Get Started <i class="bi bi-arrow-right"></i>
+                        </a>
+                        <a href="#features" class="btn-outline-gold">
+                            Explore Features <i class="bi bi-compass"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Elegant Scroll Down Indicator -->
+        <div class="scroll-indicator-wrap">
+            <span class="scroll-indicator-text">Scroll Down</span>
+            <div class="scroll-indicator-line"></div>
+        </div>
+    </section>
+
+    <!-- ─── 3. FEATURES SECTION (6 Premium Glassmorphism Cards) ─── -->
+    <section class="landing-section" id="features">
+        <div class="section-header">
+            <span class="section-badge-luxury">Sovereign Systems</span>
+            <h2 class="section-title-luxury">Elite Core Architecture</h2>
+            <div class="section-title-divider">
+                <div class="divider-branch-line"></div>
+                <div class="divider-leaf"><i class="fa-solid fa-crown"></i></div>
+                <div class="divider-branch-line right"></div>
+            </div>
+            <p class="section-desc-luxury">
+                Every component is forged to achieve administrative distinction, complete clinical compliance, and responsive digital luxury.
+            </p>
+        </div>
+
+        <div class="features-grid-luxury">
+            <!-- Feature 1 -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-person-bounding-box"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Patient Command</h3>
+                    <p class="card-luxury-text">
+                        Complete clinical lifecycle from entry registry to final recovery bills. Supports absolute EMR records, multi-parameter vitals history, and dynamic allergen logging.
+                    </p>
+                    <a href="login.html" class="card-luxury-link">Explore Module <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-calendar2-check"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Smart Scheduling</h3>
+                    <p class="card-luxury-text">
+                        Dynamic medical booking queue with automated doctor assignment, conflict-free shifts, calendar syncing, and premium SMS alert dispatches.
+                    </p>
+                    <a href="login.html" class="card-luxury-link">Explore Module <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-credit-card-2-back"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Imperial Billing</h3>
+                    <p class="card-luxury-text">
+                        Sovereign ledger invoicing with direct payment gateways, automated corporate insurance claim processing, and real-time clinical balance audits.
+                    </p>
+                    <a href="login.html" class="card-luxury-link">Explore Module <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-clipboard2-pulse"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Physician Station</h3>
+                    <p class="card-luxury-text">
+                        Personalized diagnosis console for doctors featuring quick prescription builders, direct lab report relays, and chronological patient progress graphs.
+                    </p>
+                    <a href="login.html" class="card-luxury-link">Explore Module <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-bar-chart-line"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Executive Insights</h3>
+                    <p class="card-luxury-text">
+                        Beautiful corporate dashboards with advanced statistics, occupancy heatmaps, outpatient flow metrics, and customizable automated report delivery.
+                    </p>
+                    <a href="login.html" class="card-luxury-link">Explore Module <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Sovereign Safety</h3>
+                    <p class="card-luxury-text">
+                        Strict cryptographic architecture with multi-tier role permissions, automated database audit trials, and compliance metrics.
+                    </p>
+                    <a href="login.html" class="card-luxury-link">Explore Module <i class="bi bi-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 4. MODULES SECTION (8 Department Cards) ─── -->
+    <section class="landing-section" id="modules">
+        <div class="section-header">
+            <span class="section-badge-luxury">Clinical Domains</span>
+            <h2 class="section-title-luxury">Specialized Command Modules</h2>
+            <div class="section-title-divider">
+                <div class="divider-branch-line"></div>
+                <div class="divider-leaf"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="divider-branch-line right"></div>
+            </div>
+            <p class="section-desc-luxury">
+                Dedicated interfaces modeled for the unique workflows of each hospital department.
+            </p>
+        </div>
+
+        <div class="modules-grid-luxury">
+            <!-- Module 1 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-people-fill module-icon"></i>
+                    <h4 class="module-title">Outpatient Hub</h4>
+                    <p class="module-desc">Smart digital check-in registers, immediate appointment logs, and direct pharmacy routing.</p>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-door-open-fill module-icon"></i>
+                    <h4 class="module-title">Inpatient Ward</h4>
+                    <p class="module-desc">Precise floorbed allocation, active vitals monitor tracking, and custom daily nurse shift schedules.</p>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-exclamation-triangle-fill module-icon"></i>
+                    <h4 class="module-title">Emergency Trauma</h4>
+                    <p class="module-desc">Critical admission overrides, trauma bed indicators, and rapid paging protocols.</p>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-capsule module-icon"></i>
+                    <h4 class="module-title">Pharmacy Vault</h4>
+                    <p class="module-desc">Intelligent drug inventory levels, prescription validation, and auto-restock alerts.</p>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-virus module-icon"></i>
+                    <h4 class="module-title">Pathology Lab</h4>
+                    <p class="module-desc">Secure specimen tracking, digital pathology results, and automated LIMS machine links.</p>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-camera-video-fill module-icon"></i>
+                    <h4 class="module-title">Telemedicine Suite</h4>
+                    <p class="module-desc">High-performance encrypted virtual consoles, chat logs, and digital signups.</p>
+                </div>
+            </div>
+
+            <!-- Module 7 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-radioactive module-icon"></i>
+                    <h4 class="module-title">Radiology Center</h4>
+                    <p class="module-desc">PACS image archives, immediate X-Ray / MRI file relays, and clinical reports.</p>
+                </div>
+            </div>
+
+            <!-- Module 8 -->
+            <div class="module-card-wrap reveal-fade-up">
+                <div class="module-card">
+                    <i class="bi bi-scissors module-icon"></i>
+                    <h4 class="module-title">Operation Theatre</h4>
+                    <p class="module-desc">OT scheduler, surgical team checklist synchronization, and anesthesiology metrics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 5. STATS SECTION (High Contrast Impact Indicators) ─── -->
+    <section class="stats-section-luxury" id="stats">
+        <div class="stats-grid-luxury">
+            <!-- Stat Item 1 -->
+            <div class="stat-item-wrap reveal-fade-up">
+                <div class="stat-num-luxury" data-target="10000">0</div>
+                <div class="stat-label-luxury">Patients Cared For</div>
+            </div>
+            
+            <!-- Stat Item 2 -->
+            <div class="stat-item-wrap reveal-fade-up">
+                <div class="stat-num-luxury" data-target="500">0</div>
+                <div class="stat-label-luxury">Elite Physicians</div>
+            </div>
+            
+            <!-- Stat Item 3 -->
+            <div class="stat-item-wrap reveal-fade-up">
+                <div class="stat-num-luxury" data-target="1000000">0</div>
+                <div class="stat-label-luxury">Appointments Handled</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 6. PRICING SECTION (Premium SaaS Tiers) ─── -->
+    <section class="landing-section" id="pricing">
+        <div class="section-header">
+            <span class="section-badge-luxury">Imperial Pricing</span>
+            <h2 class="section-title-luxury">Distinguished Plan Tiers</h2>
+            <div class="section-title-divider">
+                <div class="divider-branch-line"></div>
+                <div class="divider-leaf"><i class="fa-solid fa-gem"></i></div>
+                <div class="divider-branch-line right"></div>
+            </div>
+            <p class="section-desc-luxury">
+                A flexible visual pricing architecture designed for single specialized clinics, regional setups, and large clinical alliances.
+            </p>
+        </div>
+
+        <div class="features-grid-luxury">
+            <!-- Price Card 1: Clinical -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-box"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Clinical Tier</h3>
+                    <p class="card-luxury-text" style="font-weight: 700; font-size: 1.8rem; color: #fff; margin-bottom: 4px;">
+                        $199<span style="font-size: 0.85rem; font-weight: 400; color: var(--text-muted);">/month</span>
+                    </p>
+                    <p class="card-luxury-text" style="font-size: 0.8rem; color: var(--gold-primary); margin-bottom: 20px;">
+                        Perfect for independent practitioners
+                    </p>
+                    <div class="card-luxury-text" style="font-size: 0.82rem; line-height: 2;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Up to 5 Doctor Profiles</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Standard EMR Database</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Automated Prescriptions</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Web Booking Portals</li>
+                            <li style="opacity: 0.4;"><i class="bi bi-x-circle" style="margin-right: 6px;"></i> Advanced Executive Analytics</li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn-outline-gold" style="width: 100%; justify-content: center; margin-top: 24px;">
+                        Acquire License
+                    </a>
+                </div>
+            </div>
+
+            <!-- Price Card 2: Sovereign -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    
+                    <div class="card-luxury-icon-box" style="color: #040814; background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-light) 100%); border-color: #fff; box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);">
+                        <i class="bi bi-trophy"></i>
+                    </div>
+                    <h3 class="card-luxury-title" style="color: #fff;">Sovereign Tier</h3>
+                    <p class="card-luxury-text" style="font-weight: 700; font-size: 1.8rem; color: #fff; margin-bottom: 4px;">
+                        $499<span style="font-size: 0.85rem; font-weight: 400; color: var(--text-muted);">/month</span>
+                    </p>
+                    <p class="card-luxury-text" style="font-size: 0.8rem; color: var(--gold-primary); margin-bottom: 20px;">
+                        Designed for elite regional hospitals
+                    </p>
+                    <div class="card-luxury-text" style="font-size: 0.82rem; line-height: 2;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Unlimited Doctors & Staff</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Advanced Encryption Systems</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Live Patient Monitoring</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Executive KPI Dashboards</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Dedicated Server Space</li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn-gold-glow" style="width: 100%; justify-content: center; margin-top: 24px;">
+                        Acquire Sovereign License
+                    </a>
+                </div>
+            </div>
+
+            <!-- Price Card 3: Imperial -->
+            <div class="card-luxury-wrapper reveal-fade-up">
+                <div class="card-luxury">
+                    <div class="card-luxury-flourish flourish-tl"></div>
+                    <div class="card-luxury-flourish flourish-tr"></div>
+                    <div class="card-luxury-flourish flourish-bl"></div>
+                    <div class="card-luxury-flourish flourish-br"></div>
+                    
+                    <div class="card-luxury-icon-box">
+                        <i class="bi bi-buildings"></i>
+                    </div>
+                    <h3 class="card-luxury-title">Imperial Tier</h3>
+                    <p class="card-luxury-text" style="font-weight: 700; font-size: 1.8rem; color: #fff; margin-bottom: 4px;">
+                        Enterprise
+                    </p>
+                    <p class="card-luxury-text" style="font-size: 0.8rem; color: var(--gold-primary); margin-bottom: 20px;">
+                        For medical networks & consortia
+                    </p>
+                    <div class="card-luxury-text" style="font-size: 0.82rem; line-height: 2;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Custom Integration APIs</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Isolated Private Server Clusters</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> Custom AI Diagnostics Suite</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> 24/7 Royal VIP Tech Support</li>
+                            <li><i class="bi bi-check-circle-fill" style="color: var(--gold-primary); margin-right: 6px;"></i> SLA Guarantee Contract</li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn-outline-gold" style="width: 100%; justify-content: center; margin-top: 24px;">
+                        Request Consult
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 7. TESTIMONIALS SECTION (Endorsed Reviews) ─── -->
+    <section class="landing-section" id="testimonials">
+        <div class="section-header">
+            <span class="section-badge-luxury">Client Testimonials</span>
+            <h2 class="section-title-luxury">Distinguished Endorsements</h2>
+            <div class="section-title-divider">
+                <div class="divider-branch-line"></div>
+                <div class="divider-leaf"><i class="fa-solid fa-feather"></i></div>
+                <div class="divider-branch-line right"></div>
+            </div>
+            <p class="section-desc-luxury">
+                Trusted by elite clinical operators and hospital directors running premium health institutions.
+            </p>
+        </div>
+
+        <div class="testimonials-grid-luxury">
+            <!-- Review 1 -->
+            <div class="testimonial-card-wrap reveal-fade-up">
+                <div class="testimonial-card-luxury">
+                    <i class="bi bi-quote testimonial-quote-icon"></i>
+                    <p class="testimonial-text-luxury">
+                        "PG Care completely transformed our administrative workflow overnight. The clinical command layout feels premium, EMR archives load instantaneously, and the diagnostic reports are crystal-clear."
+                    </p>
+                    <div class="testimonial-stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div class="testimonial-profile">
+                        <div class="testimonial-avatar">AK</div>
+                        <div class="testimonial-meta">
+                            <span class="testimonial-author">Dr. Aisha Khan</span>
+                            <span class="testimonial-role">Chief Medical Officer, Apex Hospital</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="testimonial-card-wrap reveal-fade-up">
+                <div class="testimonial-card-luxury">
+                    <i class="bi bi-quote testimonial-quote-icon"></i>
+                    <p class="testimonial-text-luxury">
+                        "Integrating our dynamic radiology and pharmacy hubs was incredibly smooth. Our physicians love the quick-fill prescription builders and patients praise the responsive web scheduling portals."
+                    </p>
+                    <div class="testimonial-stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div class="testimonial-profile">
+                        <div class="testimonial-avatar">RP</div>
+                        <div class="testimonial-meta">
+                            <span class="testimonial-author">Mr. Raj Patel</span>
+                            <span class="testimonial-role">IT Director, Serenity Health Group</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="testimonial-card-wrap reveal-fade-up">
+                <div class="testimonial-card-luxury">
+                    <i class="bi bi-quote testimonial-quote-icon"></i>
+                    <p class="testimonial-text-luxury">
+                        "In our department, sovereign safety audits and role-based permissions are non-negotiable. PG Care has exceeded our strict security requirements while keeping a beautiful, responsive aesthetic."
+                    </p>
+                    <div class="testimonial-stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div class="testimonial-profile">
+                        <div class="testimonial-avatar">LG</div>
+                        <div class="testimonial-meta">
+                            <span class="testimonial-author">Ms. Lina Gomez</span>
+                            <span class="testimonial-role">Operations Lead, Horizon Clinics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 8. CTA BANNER (Pulsing Final Command Invite) ─── -->
+    <section class="cta-banner-luxury" id="cta">
+        <div class="cta-banner-card reveal-fade-up">
+            <div class="cta-banner-content">
+                <div class="cta-banner-light-streak"></div>
+                <i class="bi bi-shield-fill-check cta-banner-icon"></i>
+                <h2 class="cta-banner-title">Elevate Your Command Center</h2>
+                <p class="cta-banner-subtitle">
+                    Step into the future of sovereign clinical operations. Infinitely elegant, robustly secure, and built for true leaders.
+                </p>
+                <div class="cta-btn-wrap">
+                    <div class="cta-pulse-ring"></div>
+                    <a href="login.html" class="btn-gold-glow">
+                        Acquire Royal Portal <i class="bi bi-box-arrow-in-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 9. FOOTER (Gold Accented & Divided Layout) ─── -->
+    <footer class="luxury-footer" id="contact">
+        <div class="footer-grid-luxury">
+            <!-- Logo & Description Col -->
+            <div class="footer-logo-col">
+                <a href="#home" class="nav-brand">
+                    <i class="fa-solid fa-staff-aesculapius nav-logo-icon"></i>
+                    <span class="nav-title">PG Care</span>
+                </a>
+                <p class="footer-desc">
+                    High-performance digital orchestration engine engineered to empower premium hospitals with absolute clinical elegance and administrative sovereignty.
+                </p>
+            </div>
+            
+            <!-- Products Link Col -->
+            <div>
+                <h5 class="footer-title-luxury">Command Suite</h5>
+                <ul class="footer-links-list">
+                    <li><a href="#features">Core Features</a></li>
+                    <li><a href="#modules">Clinical Modules</a></li>
+                    <li><a href="#pricing">License Tiers</a></li>
+                    <li><a href="login.html">Register Account</a></li>
+                </ul>
+            </div>
+
+            <!-- Portal Links Col -->
+            <div>
+                <h5 class="footer-title-luxury">Sovereignty</h5>
+                <ul class="footer-links-list">
+                    <li><a href="login.html">Admin Command</a></li>
+                    <li><a href="login.html">Physician Station</a></li>
+                    <li><a href="login.html">Patient Portal</a></li>
+                    <li><a href="#features">Cryptographic Safety</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Links & Newsletter Col -->
+            <div>
+                <h5 class="footer-title-luxury">Connect</h5>
+                <p class="footer-desc" style="margin-bottom: 12px;">Reach our royal concierge desk for custom installations.</p>
+                <div class="footer-social-wrap">
+                    <a href="#" class="footer-social-btn" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="footer-social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" class="footer-social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom Bar -->
+        <div class="footer-bottom-bar">
+            <span>© 2026 PG Care. Built with absolute administrative distinction.</span>
+            <div class="footer-bottom-links">
+                <a href="#">Sovereign Terms</a>
+                <a href="#">Clinical Standards</a>
+                <a href="#">Security Protocol</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ─── ADVANCED INTERACTIVE JS POLISH ─── -->
+    <script>
+        /* 1. Navbar Scroll Shrink */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        /* 2. Scroll Reveal Animations (AOS replacement) */
+        const reveals = document.querySelectorAll('.reveal-fade-up');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Stop observing once visible to maintain static layout
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        reveals.forEach(el => revealObserver.observe(el));
+
+        /* 3. Numerical Stat Count-Up Animation */
+        const statsSection = document.getElementById('stats');
+        let hasAnimatedStats = false;
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hasAnimatedStats) {
+                const nums = document.querySelectorAll('.stat-num-luxury');
+                nums.forEach(num => {
+                    const target = parseInt(num.getAttribute('data-target'), 10);
+                    // Slow down large numbers, speed up small ones
+                    const duration = 120; 
+                    const stepValue = target / duration;
+                    let currentValue = 0;
+                    
+                    const update = () => {
+                        currentValue += stepValue;
+                        if (currentValue < target) {
+                            num.textContent = Math.floor(currentValue).toLocaleString() + '+';
+                            requestAnimationFrame(update);
+                        } else {
+                            num.textContent = target.toLocaleString() + '+';
+                        }
+                    };
+                    update();
+                });
+                hasAnimatedStats = true;
+            }
+        }, {
+            threshold: 0.3
+        });
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        /* 4. Mouse-Coordinate Parallax Atmospheric Engine */
+        const isMobile = window.matchMedia("(max-width: 991px)").matches;
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                const x = (e.clientX - window.innerWidth / 2) / 50;
+                const y = (e.clientY - window.innerHeight / 2) / 50;
+                
+                const hospitalImg = document.getElementById('hero-hospital-img');
+                const medicalPattern = document.querySelector('.medical-abstract-pattern');
+                const orbs = document.querySelectorAll('.ambient-orb');
+                
+                if (hospitalImg) {
+                    hospitalImg.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px)`;
+                }
+                if (medicalPattern) {
+                    medicalPattern.style.transform = `translate(${-x}px, ${-y}px)`;
+                }
+                orbs.forEach((orb, index) => {
+                    const scale = 1 + (index * 0.05);
+                    orb.style.transform = `translate(${x * (index + 1) * 0.25}px, ${y * (index + 1) * 0.25}px) scale(${scale})`;
+                });
+            });
+        }
+
+        /* 5. Slow Drifting Ambient Gold Particles Simulation */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const maxParticles = isMobile ? 20 : 50; // Cap particle count strictly
+
+        function setCanvasDimensions() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', setCanvasDimensions);
+        setCanvasDimensions();
+
+        class Particle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height; // scatter initially
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 20 + 5;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = Math.random() * 0.4 + 0.15;
+                this.speedX = Math.random() * 0.2 - 0.1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.goldHue = 45; // Golden hue
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                
+                // Reset particle if it drifts out of view
+                if (this.y < -this.size || this.x < -this.size || this.x > canvas.width + this.size) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.goldHue}, 68%, 52%, ${this.opacity})`;
+                ctx.shadowBlur = this.size * 3;
+                ctx.shadowColor = `hsla(${this.goldHue}, 68%, 52%, 0.4)`;
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Particle());
+        }
+
+        /* 6. Canvas Golden Spark Cursor Trail (Mouse Follower Trail) */
+        let sparks = [];
+        class Spark {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1.5;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = (Math.random() - 0.5) * 1.5;
+                this.opacity = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= this.decay;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = 'rgba(212, 175, 55, 0.6)';
+                ctx.fill();
+            }
+        }
+
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                // Generate a spark at mouse coordinates
+                sparks.push(new Spark(e.clientX, e.clientY));
+                // Throttle maximum active sparks to preserve frame rate
+                if (sparks.length > 40) {
+                    sparks.shift();
+                }
+            });
+        }
+
+        // Global Loop Orchestrator (requestAnimationFrame)
+        function animateEngine() {
+            // Clear canvas while maintaining transparency
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0; // Reset global shadow blur
+
+            // Update & Draw drifting ambient particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Update & Draw custom cursor trail sparks
+            if (!isMobile) {
+                sparks.forEach((spark, index) => {
+                    spark.update();
+                    if (spark.opacity <= 0) {
+                        sparks.splice(index, 1);
+                    } else {
+                        spark.draw();
+                    }
+                });
+            }
+
+            requestAnimationFrame(animateEngine);
+        }
+        animateEngine();
+    </script>
+</body>
+</html>
