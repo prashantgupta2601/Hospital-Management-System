@@ -1,14 +1,49 @@
 package com.hms.modules.analytics.dto;
 
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
+import java.time.ZoneId;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentsPerDayDTO {
     private LocalDate date;
     private Long count;
+
+    public AppointmentsPerDayDTO(LocalDate date, Long count) {
+        this.date = date;
+        this.count = count;
+    }
+
+    public AppointmentsPerDayDTO(java.sql.Date date, Long count) {
+        this.date = date != null ? date.toLocalDate() : null;
+        this.count = count;
+    }
+
+    public AppointmentsPerDayDTO(java.util.Date date, Long count) {
+        if (date instanceof java.sql.Date) {
+            this.date = ((java.sql.Date) date).toLocalDate();
+        } else {
+            this.date = date != null ? date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
+        }
+        this.count = count;
+    }
+
+    public AppointmentsPerDayDTO(Object date, Long count) {
+        if (date instanceof LocalDate) {
+            this.date = (LocalDate) date;
+        } else if (date instanceof java.sql.Date) {
+            this.date = ((java.sql.Date) date).toLocalDate();
+        } else if (date instanceof java.util.Date) {
+            this.date = ((java.util.Date) date).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        } else if (date != null) {
+            try {
+                this.date = LocalDate.parse(date.toString());
+            } catch (Exception e) {
+                this.date = null;
+            }
+        }
+        this.count = count;
+    }
 }
