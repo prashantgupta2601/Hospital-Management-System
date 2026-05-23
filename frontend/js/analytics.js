@@ -135,18 +135,15 @@ function animateNumber(elementId, targetValue) {
 // ─── Chart.js Render Methods ──────────────────────────────────────────────────
 
 function getThemeColors() {
-    const theme = document.documentElement.getAttribute('data-theme') || 'light';
-    const isDark = theme === 'dark';
-
     return {
-        isDark,
-        text: isDark ? '#94a3b8' : '#64748b',
-        grid: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(100, 116, 139, 0.06)',
-        primary: '#4361ee',
-        secondary: '#a855f7',
-        success: '#4ade80',
+        isDark: true,
+        text: '#f3e5ab', // Soft Gold
+        grid: 'rgba(212, 175, 55, 0.08)',
+        primary: '#d4af37', // Imperial Gold
+        secondary: '#38bdf8', // Blue Glow
+        success: '#ffd700', // Neon Gold
         warning: '#fb923c',
-        cardBg: isDark ? '#1e293b' : '#ffffff'
+        cardBg: 'rgba(8, 16, 36, 0.7)'
     };
 }
 
@@ -167,8 +164,8 @@ function renderPatientGrowthChart(data) {
     // Create gradient fill
     const canvasCtx = ctx.getContext('2d');
     const gradient = canvasCtx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(67, 97, 238, 0.35)');
-    gradient.addColorStop(1, 'rgba(67, 97, 238, 0.0)');
+    gradient.addColorStop(0, 'rgba(212, 175, 55, 0.35)');
+    gradient.addColorStop(1, 'rgba(11, 28, 44, 0.0)');
 
     patientGrowthChart = new Chart(ctx, {
         type: 'line',

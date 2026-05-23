@@ -342,3 +342,246 @@ body.page-transitioning {
 .btn-toast-action:hover {
     background: rgba(255, 255, 255, 0.25);
 }
+
+/* ─── 🏛️ VINTAGE IMPERIAL LUXURY COMPONENT SYSTEM ─── */
+
+/* Breathing breathing animation on luxury card panels */
+@keyframes card-breath {
+    0%, 100% {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), 0 0 10px rgba(212, 175, 55, 0.04);
+    }
+    50% {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), 0 0 20px rgba(212, 175, 55, 0.15);
+    }
+}
+
+.card, .stats-card, .chart-card {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.15) !important;
+    border-radius: 20px !important;
+    padding: 24px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45) !important;
+    transition: all 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    animation: card-breath 6s ease-in-out infinite !important;
+}
+
+/* Shimmer line atop the luxury cards */
+.card::before, .stats-card::before, .chart-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, transparent, var(--gold-primary), var(--gold-light), var(--gold-primary), transparent) !important;
+    background-size: 200% auto !important;
+    animation: goldShimmer 4s linear infinite !important;
+    opacity: 0.7 !important;
+    z-index: 10 !important;
+}
+
+@keyframes goldShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.card:hover, .stats-card:hover, .chart-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(212, 175, 55, 0.2) !important;
+    border-color: var(--gold-primary) !important;
+}
+
+/* Royal Gold Buttons with animated shimmer on hover */
+.btn-primary, .btn-submit, .btn-retry, #refresh-analytics {
+    background: linear-gradient(135deg, #8a640f 0%, #d4af37 50%, #aa7c11 100%) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+    color: #040814 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    border-radius: 30px !important;
+    padding: 10px 24px !important;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3), 0 0 5px rgba(212, 175, 55, 0.1) !important;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.btn-primary::after, .btn-submit::after, .btn-retry::after, #refresh-analytics::after {
+    content: '' !important;
+    position: absolute !important;
+    top: -50% !important;
+    left: -70% !important;
+    width: 40% !important;
+    height: 200% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent) !important;
+    transform: rotate(30deg) !important;
+    transition: none !important;
+}
+
+.btn-primary:hover, .btn-submit:hover, .btn-retry:hover, #refresh-analytics:hover {
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.55), 0 0 15px rgba(212, 175, 55, 0.3) !important;
+    border-color: var(--gold-primary) !important;
+    color: #040814 !important;
+}
+
+.btn-primary:hover::after, .btn-submit:hover::after, .btn-retry:hover::after, #refresh-analytics:hover::after {
+    left: 130% !important;
+    transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+/* Glassmorphism Inputs */
+.form-control, .form-select, input[type="text"], input[type="email"], input[type="password"], select, textarea {
+    background: rgba(3, 6, 15, 0.65) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+    border-radius: 10px !important;
+    color: var(--text-light) !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    padding: 12px 16px !important;
+}
+
+.form-control:focus, .form-select:focus, input:focus, select:focus, textarea:focus {
+    border-color: var(--gold-primary) !important;
+    box-shadow: 0 0 12px var(--gold-glow), inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    background: rgba(6, 12, 28, 0.85) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Luxury Tables */
+.table-responsive {
+    background: transparent !important;
+    border: none !important;
+}
+
+.table {
+    background-color: transparent !important;
+    color: var(--text-cream) !important;
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+}
+
+.table thead th {
+    background: rgba(4, 7, 18, 0.85) !important;
+    color: var(--gold-primary) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    border-bottom: 2px solid var(--gold-primary) !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    padding: 14px !important;
+}
+
+.table tbody tr {
+    background: rgba(8, 16, 36, 0.45) !important;
+    transition: all 0.3s ease !important;
+}
+
+.table tbody tr:hover {
+    background: rgba(212, 175, 55, 0.08) !important;
+    transform: scale(1.005) !important;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1) !important;
+}
+
+.table tbody td {
+    border-top: 1px solid rgba(212, 175, 55, 0.1) !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1) !important;
+    color: var(--text-cream) !important;
+    padding: 14px !important;
+}
+
+.table tbody tr td:first-child {
+    border-left: 1px solid rgba(212, 175, 55, 0.1) !important;
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+}
+
+.table tbody tr td:last-child {
+    border-right: 1px solid rgba(212, 175, 55, 0.1) !important;
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+/* Sidebar Enhancements */
+#sidebar {
+    background: rgba(4, 7, 18, 0.95) !important;
+    border-right: 1px solid rgba(212, 175, 55, 0.15) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15) !important;
+}
+
+#sidebar .nav-link {
+    color: rgba(241, 245, 249, 0.65) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.05em !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+#sidebar .nav-link:hover {
+    color: var(--gold-primary) !important;
+    background: rgba(212, 175, 55, 0.08) !important;
+    transform: translateX(6px) !important;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.25) !important;
+}
+
+#sidebar .nav-link.active {
+    color: #040814 !important;
+    background: linear-gradient(135deg, var(--gold-primary) 0%, #aa7c11 100%) !important;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4), 0 0 10px rgba(212, 175, 55, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+#sidebar .nav-link.active::before {
+    background-color: #040814 !important;
+}
+
+/* Modal and Navbar glassmorphisms */
+.navbar {
+    background: rgba(6, 12, 28, 0.65) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1.5px solid rgba(212, 175, 55, 0.18) !important;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+.modal-content {
+    background: rgba(8, 16, 36, 0.95) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 175, 55, 0.1) !important;
+    position: relative !important;
+}
+
+.modal-content::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, transparent, var(--gold-primary), var(--gold-light), var(--gold-primary), transparent) !important;
+    background-size: 200% auto !important;
+    animation: goldShimmer 4s linear infinite !important;
+    opacity: 0.7 !important;
+    z-index: 10 !important;
+    border-top-left-radius: 24px !important;
+    border-top-right-radius: 24px !important;
+}
+
