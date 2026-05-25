@@ -1,29 +1,59 @@
+# ─────────────────────────────────────────────────────────────
+# PG CARE — Spring Boot Application Configuration
+# All secrets are injected via environment variables.
+# No hardcoded credentials in this file.
+# ─────────────────────────────────────────────────────────────
+
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
 
 spring:
   application:
     name: hospital-management-system
-  
-  datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/hms}
-    username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:postgres}
-    driver-class-name: org.postgresql.Driver
-  
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  # ── Active Profile ──────────────────────────────────────────
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ── JPA / Hibernate ────────────────────────────────────────
+  jpa:
+    open-in-view: false
+
+# ── HMS Custom Properties ───────────────────────────────────
+hms:
+  app:
+    jwtSecret: ${JWT_SECRET}
+    jwtExpirationMs: ${JWT_EXPIRATION_MS:86400000}
+
+# ── Actuator Health Checks ──────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: PG Care HMS
+    description: AI-powered Hospital Management System
+    version: 1.0.0
 
 ---
+# ── DEV Profile (H2 in-memory, no secrets needed) ───────────
 spring:
   config:
     activate:
@@ -44,8 +74,40 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
 
 hms:
   app:
-    jwtSecret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-    jwtExpirationMs: 86400000
+    jwtSecret: ${JWT_SECRET:dev_only_insecure_key_replace_in_prod_404E635266556A586E3272357538782F}
+    jwtExpirationMs: ${JWT_EXPIRATION_MS:86400000}
+
+---
+# ── PROD Profile (PostgreSQL, env-driven) ───────────────────
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+management:
+  endpoint:
+    health:
+      show-details: always
