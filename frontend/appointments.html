@@ -122,12 +122,14 @@
                 </div>
                 <div class="modal-body p-4 overflow-hidden">
                     <form id="bookAppointmentForm" onsubmit="handleBookAppointment(event)">
-                        <!-- Step 1 -->
                         <div id="appointment-step-1" class="step-container">
                             <div class="row g-3">
                                 <div class="col-md-12">
-                                    <label class="form-label small fw-semibold">Patient ID</label>
-                                    <input type="number" name="patientId" id="step1PatientId" class="form-control" placeholder="Enter Patient ID">
+                                    <label class="form-label small fw-semibold">Select Patient</label>
+                                    <select name="patientId" id="appt-patient-select" class="form-select" required>
+                                        <option value="">-- Select Patient --</option>
+                                    </select>
+                                    <div class="form-text text-muted mt-1" style="font-size: 0.75rem;"><i class="fas fa-info-circle me-1"></i>Patient list loads from the database.</div>
                                 </div>
                                 <div class="col-md-12 mt-4">
                                     <button type="button" id="btn-next-step" class="btn btn-primary w-100 py-2 gsap-hover">Next Step</button>
@@ -139,11 +141,13 @@
                         <div id="appointment-step-2" class="step-container">
                             <div class="row g-3">
                                 <div class="col-md-12">
-                                    <label class="form-label small fw-semibold">Doctor ID</label>
-                                    <input type="number" name="doctorId" class="form-control" placeholder="Enter Doctor ID" required>
+                                    <label class="form-label small fw-semibold">Select Doctor</label>
+                                    <select name="doctorId" id="appt-doctor-select" class="form-select" required>
+                                        <option value="">-- Select Doctor --</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="form-label small fw-semibold">Appointment Date & Time</label>
+                                    <label class="form-label small fw-semibold">Appointment Date &amp; Time</label>
                                     <input type="datetime-local" name="appointmentDate" class="form-control" required>
                                 </div>
                                 <div class="col-md-12">
@@ -187,6 +191,18 @@
     <script src="animations/animations.js"></script>
     
     <script>
+        // Auto-populate dropdowns when booking modal opens
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('bookAppointmentModal');
+            if (modal) {
+                modal.addEventListener('show.bs.modal', () => {
+                    if (typeof populateAppointmentDropdowns === 'function') {
+                        populateAppointmentDropdowns();
+                    }
+                });
+            }
+        });
+
         // Intercept handleBookAppointment to show success animation
         const originalHandleBookAppointment = window.handleBookAppointment;
         if (originalHandleBookAppointment) {

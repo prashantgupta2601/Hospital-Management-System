@@ -126,6 +126,16 @@ const AnimationManager = {
         if (nextBtn) {
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                
+                // Validate patient selection before advancing
+                const patientSelect = document.getElementById('appt-patient-select');
+                if (patientSelect && !patientSelect.value) {
+                    if (window.Toast) {
+                        window.Toast.error('Please select a patient before continuing.');
+                    }
+                    return;
+                }
+                
                 const step1 = document.getElementById('appointment-step-1');
                 const step2 = document.getElementById('appointment-step-2');
                 
