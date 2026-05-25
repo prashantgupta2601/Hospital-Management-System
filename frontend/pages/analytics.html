@@ -135,15 +135,16 @@
                     </div>
                     <div class="dropdown">
                         <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="35" height="35">
+                            <img id="navAvatar" src="" class="rounded-circle me-2" width="35" height="35">
                             <div class="d-none d-sm-block">
-                                <p class="mb-0 text-main fw-semibold small">Alex Johnson</p>
+                                <p class="mb-0 text-main fw-semibold small" id="navUsername"></p>
+                                <p class="mb-0 text-muted extra-small" style="font-size: 0.7rem;" id="navRole"></p>
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
                             <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item py-2 text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                            <li><a class="dropdown-item py-2 text-danger" href="#" onclick="AuthService.logout(); return false;"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -269,6 +270,14 @@
         // Guard to ensure user is logged in
         if (!AuthService.isLoggedIn()) { 
             window.location.href = '../login.html'; 
+        } else {
+            // Populate navbar user info
+            const u = AuthService.getUser() || {};
+            const name = u.username || 'User';
+            const roles = (u.roles || []).map(r => r.replace('ROLE_', '')).join(', ') || 'Guest';
+            document.getElementById('navUsername').textContent = name;
+            document.getElementById('navRole').textContent    = roles;
+            document.getElementById('navAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4361ee&color=fff`;
         }
     </script>
 </body>
