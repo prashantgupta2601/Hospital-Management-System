@@ -48,4 +48,6 @@ public class Billing {
     
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private String createdBy;
 }

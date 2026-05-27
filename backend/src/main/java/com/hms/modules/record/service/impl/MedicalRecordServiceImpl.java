@@ -40,6 +40,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + dto.getDoctorId()));
 
         MedicalRecord record = mapToEntity(dto, patient, doctor);
+        record.setCreatedBy(getCurrentAuditor()); // Populate Audit
+        
         MedicalRecord savedRecord = medicalRecordRepository.save(record);
         MedicalRecordDTO result = mapToDTO(savedRecord);
 
@@ -156,5 +158,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         if (calculatedSize > maxSizeLimit) {
             throw new IllegalArgumentException("File size exceeds the maximum limit of 5MB.");
         }
+    }
+
+    private String getCurrentAuditor() {
+        org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            return auth.getName();
+        }
+        return "SYSTEM";
     }
 }

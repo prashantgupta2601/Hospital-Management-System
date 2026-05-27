@@ -39,6 +39,7 @@ public class BillingServiceImpl implements BillingService {
                 .amount(billingDTO.getAmount())
                 .paymentStatus(PaymentStatus.PENDING)
                 .invoiceDate(LocalDateTime.now())
+                .createdBy(getCurrentAuditor()) // Populate Audit
                 .build();
         
         Billing savedBilling = billingRepository.save(billing);
@@ -88,5 +89,14 @@ public class BillingServiceImpl implements BillingService {
                 .createdAt(billing.getCreatedAt())
                 .updatedAt(billing.getUpdatedAt())
                 .build();
+    }
+
+    private String getCurrentAuditor() {
+        org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            return auth.getName();
+        }
+        return "SYSTEM";
     }
 }

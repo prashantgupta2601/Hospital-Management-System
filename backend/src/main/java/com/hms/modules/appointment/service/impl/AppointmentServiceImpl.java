@@ -37,6 +37,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = mapToEntity(appointmentDTO, patient, doctor);
         appointment.setStatus(AppointmentStatus.SCHEDULED);
+        appointment.setCreatedBy(getCurrentAuditor()); // Populate Audit
+        
         Appointment savedAppointment = appointmentRepository.save(appointment);
         AppointmentDTO result = mapToDTO(savedAppointment);
 
@@ -146,5 +148,14 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .status(dto.getStatus())
                 .notes(dto.getNotes())
                 .build();
+    }
+
+    private String getCurrentAuditor() {
+        org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            return auth.getName();
+        }
+        return "SYSTEM";
     }
 }

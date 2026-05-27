@@ -47,4 +47,6 @@ public class Appointment {
     
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private String createdBy;
 }

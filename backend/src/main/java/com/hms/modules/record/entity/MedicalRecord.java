@@ -56,4 +56,6 @@ public class MedicalRecord {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private String createdBy;
 }
