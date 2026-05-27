@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Schedules | PG Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ux-polish.css">
+    <style>
+        .shift-card {
+            border-left: 4px solid var(--gold-primary) !important;
+            transition: var(--transition);
+            background: rgba(8, 16, 36, 0.45) !important;
+        }
+        .shift-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--gold-glow);
+            border-left-color: var(--gold-light) !important;
+        }
+        .matrix-day-header {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            border-bottom: 2px solid var(--gold-border);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-heart-pulse me-2"></i> PG CARE</h4>
+        </div>
+        <div class="nav flex-column mt-4">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-grid-2"></i> Dashboard
+            </a>
+            <a class="nav-link" href="patients.html">
+                <i class="fas fa-user-injured"></i> Patients
+            </a>
+            <a class="nav-link" href="doctors.html">
+                <i class="fas fa-user-md"></i> Doctors
+            </a>
+            <a class="nav-link" href="appointments.html">
+                <i class="fas fa-calendar-alt"></i> Appointments
+            </a>
+            <a class="nav-link" href="records.html">
+                <i class="fas fa-file-medical"></i> Medical Records
+            </a>
+            <a class="nav-link active" href="shifts.html">
+                <i class="fas fa-business-time"></i> Shifts
+            </a>
+            <a class="nav-link" href="pages/analytics.html">
+                <i class="fas fa-chart-line"></i> Analytics
+            </a>
+            <div class="mt-auto mb-4">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid p-0">
+                <button type="button" id="sidebarCollapse" class="btn border-0 d-lg-none me-3">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="ms-auto d-flex align-items-center">
+                    <div id="theme-toggle" class="me-3">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <img id="navAvatar" src="" class="rounded-circle me-2" width="35" height="35">
+                            <div class="d-none d-sm-block">
+                                <p class="mb-0 text-main fw-semibold small" id="navUsername"></p>
+                                <p class="mb-0 text-muted extra-small" style="font-size: 0.7rem;" id="navRole"></p>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
+                            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 text-danger" href="#" onclick="AuthService.logout(); return false;"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container-fluid p-4 fade-in">
+            <div class="row align-items-center mb-4">
+                <div class="col">
+                    <h3 class="fw-bold mb-1">Staff Shift Management</h3>
+                    <p class="text-muted small mb-0">Schedule doctor working schedules, departments, and active shift timetables.</p>
+                </div>
+                <div class="col-auto" id="add-shift-btn-container">
+                    <button class="btn btn-primary px-4 shadow-sm gsap-hover" data-bs-toggle="modal" data-bs-target="#addShiftModal">
+                        <i class="fas fa-plus me-2"></i>Schedule Shift
+                    </button>
+                </div>
+            </div>
+
+            <!-- Matrix Board -->
+            <div class="card mb-4" data-aos="fade-up">
+                <h5 class="fw-bold text-main mb-4"><i class="fas fa-calendar-week text-primary me-2"></i>Weekly Schedule Matrix</h5>
+                <div class="row row-cols-1 row-cols-md-7 g-3" id="weekly-matrix-container">
+                    <!-- Days dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Shifts List Table -->
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <h5 class="fw-bold text-main mb-4"><i class="fas fa-list text-purple me-2"></i>Active Roster Timetable</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="shifts-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Doctor Name</th>
+                                <th>Department</th>
+                                <th>Day of Week</th>
+                                <th>Shift Time</th>
+                                <th>Status</th>
+                                <th class="admin-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shifts-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted small">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Loading active shift registries...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Shift Modal -->
+    <div class="modal fade" id="addShiftModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="shift-modal-title">Schedule Doctor Shift</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="addShiftForm" onsubmit="handleSaveShift(event)">
+                        <input type="hidden" id="shift-edit-id">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label small fw-semibold">Doctor</label>
+                                <select id="shift-doctor-select" class="form-select" required>
+                                    <option value="">-- Choose Doctor --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Day of Week</label>
+                                <select id="shift-day-select" class="form-select" required>
+                                    <option value="MONDAY">Monday</option>
+                                    <option value="TUESDAY">Tuesday</option>
+                                    <option value="WEDNESDAY">Wednesday</option>
+                                    <option value="THURSDAY">Thursday</option>
+                                    <option value="FRIDAY">Friday</option>
+                                    <option value="SATURDAY">Saturday</option>
+                                    <option value="SUNDAY">Sunday</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Clinical Department</label>
+                                <select id="shift-dept-select" class="form-select" required>
+                                    <option value="Cardiology">Cardiology</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="Neurology">Neurology</option>
+                                    <option value="Emergency">Emergency Room</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Start Time</label>
+                                <input type="time" id="shift-start-time" class="form-control" required value="09:00">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">End Time</label>
+                                <input type="time" id="shift-end-time" class="form-control" required value="17:00">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-semibold">Status</label>
+                                <select id="shift-status-select" class="form-select" required>
+                                    <option value="ACTIVE">Active Duty</option>
+                                    <option value="ON_LEAVE">On Leave</option>
+                                    <option value="OFF">Off Duty</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <button type="submit" class="btn btn-primary w-100 py-2">
+                                    <i class="fas fa-check-circle me-2"></i>Save Timetable Entry
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="services/api.js"></script>
+    <script src="services/websocket.js"></script>
+    <script src="js/ux.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="animations/animations.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        // Auth displays
+        const u = AuthService.getUser() || {};
+        const name = u.username || 'User';
+        const roles = (u.roles || []).map(r => r.replace('ROLE_', '')).join(', ') || 'Guest';
+        document.getElementById('navUsername').textContent = name;
+        document.getElementById('navRole').textContent    = roles;
+        document.getElementById('navAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4361ee&color=fff`;
+
+        // Role-Based actions guard
+        const isAdmin = AuthService.hasRole('ROLE_ADMIN');
+        if (!isAdmin) {
+            document.getElementById('add-shift-btn-container').style.display = 'none';
+            // Hide action headers
+            document.querySelectorAll('.admin-actions').forEach(el => el.style.display = 'none');
+        }
+
+        // Days constants
+        const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
+
+        async function loadDoctorsDropdown() {
+            try {
+                const res = await AppState.getDoctors();
+                const docSelect = document.getElementById('shift-doctor-select');
+                res.data.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = `Dr. ${d.name} (${d.specialization})`;
+                    docSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadShiftScheduler() {
+            try {
+                const res = await AppState.getShifts(true);
+                const shifts = res.data;
+
+                populateMatrix(shifts);
+                populateTable(shifts);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('shifts-table-body').innerHTML = '<tr><td colspan="7" class="text-danger text-center">Failed to load shifts.</td></tr>';
+            }
+        }
+
+        function populateMatrix(shifts) {
+            const container = document.getElementById('weekly-matrix-container');
+            container.innerHTML = '';
+
+            DAYS.forEach(day => {
+                const col = document.createElement('div');
+                col.className = 'col';
+                col.setAttribute('data-aos', 'fade-up');
+
+                const dayTitle = day.charAt(0) + day.substring(1).toLowerCase();
+                let shiftCardsHtml = '';
+                
+                const dayShifts = shifts.filter(s => s.dayOfWeek === day);
+
+                if (dayShifts.length === 0) {
+                    shiftCardsHtml = '<div class="text-muted extra-small text-center py-3 border border-secondary border-opacity-10 rounded bg-midnight bg-opacity-10">No Shifts</div>';
+                } else {
+                    dayShifts.forEach(s => {
+                        let statusColor = 'text-gold-primary';
+                        if (s.status === 'ON_LEAVE') statusColor = 'text-warning';
+                        if (s.status === 'OFF') statusColor = 'text-danger';
+
+                        shiftCardsHtml += `
+                            <div class="card shift-card p-2 mb-2 border border-secondary border-opacity-10">
+                                <h6 class="extra-small fw-bold text-main mb-1" style="font-size:0.8rem;">Dr. ${s.doctorName}</h6>
+                                <p class="extra-small text-muted mb-1" style="font-size:0.7rem;"><i class="fas fa-stethoscope text-gold-primary me-1"></i>${s.department}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="extra-small text-gold-light" style="font-size:0.68rem;"><i class="far fa-clock me-1"></i>${s.startTime.substring(0, 5)}-${s.endTime.substring(0, 5)}</span>
+                                    <span class="extra-small ${statusColor} fw-semibold" style="font-size:0.6rem;">${s.status}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                col.innerHTML = `
+                    <div class="matrix-day-header">${dayTitle}</div>
+                    <div class="matrix-slots">
+                        ${shiftCardsHtml}
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        function populateTable(shifts) {
+            const body = document.getElementById('shifts-table-body');
+            body.innerHTML = '';
+
+            if (shifts.length === 0) {
+                body.innerHTML = '<tr><td colspan="7" class="text-center text-muted small py-4">No active schedules assigned.</td></tr>';
+                return;
+            }
+
+            shifts.forEach(s => {
+                const tr = document.createElement('tr');
+                let statusBadge = `<span class="badge bg-success bg-opacity-15 text-gold-light">Active</span>`;
+                if (s.status === 'ON_LEAVE') statusBadge = `<span class="badge bg-warning bg-opacity-15 text-warning">On Leave</span>`;
+                if (s.status === 'OFF') statusBadge = `<span class="badge bg-danger bg-opacity-15 text-danger">Off Duty</span>`;
+
+                let actionButton = '';
+                if (isAdmin) {
+                    actionButton = `
+                        <button class="btn btn-outline-danger btn-sm px-3 gsap-hover border border-danger border-opacity-25" onclick="handleDeleteShift(${s.id})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td>${s.id}</td>
+                    <td class="fw-semibold text-gold-light">Dr. ${s.doctorName}</td>
+                    <td><i class="fas fa-clinic-medical text-primary me-2"></i>${s.department}</td>
+                    <td>${s.dayOfWeek}</td>
+                    <td><i class="far fa-clock text-gold-primary me-2"></i>${s.startTime.substring(0,5)} - ${s.endTime.substring(0,5)}</td>
+                    <td>${statusBadge}</td>
+                    <td class="admin-actions">${actionButton}</td>
+                `;
+                body.appendChild(tr);
+            });
+
+            if (!isAdmin) {
+                document.querySelectorAll('.admin-actions').forEach(el => el.style.display = 'none');
+            }
+        }
+
+        async function handleSaveShift(e) {
+            e.preventDefault();
+
+            const docId = document.getElementById('shift-doctor-select').value;
+            const dayOfWeek = document.getElementById('shift-day-select').value;
+            const department = document.getElementById('shift-dept-select').value;
+            const startTime = document.getElementById('shift-start-time').value + ":00";
+            const endTime = document.getElementById('shift-end-time').value + ":00";
+            const status = document.getElementById('shift-status-select').value;
+
+            const payload = {
+                doctorId: parseInt(docId),
+                dayOfWeek: dayOfWeek,
+                startTime: startTime,
+                endTime: endTime,
+                department: department,
+                status: status
+            };
+
+            try {
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving schedule...';
+
+                await ShiftAPI.create(payload);
+
+                if (window.Toast) window.Toast.success('Doctor shifts locked into active roster!');
+                
+                // Hide modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addShiftModal'));
+                if (modal) modal.hide();
+
+                document.getElementById('addShiftForm').reset();
+
+                // Reload scheduler
+                await loadShiftScheduler();
+            } catch (err) {
+                console.error(err);
+            } finally {
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Save Timetable Entry';
+            }
+        }
+
+        async function handleDeleteShift(shiftId) {
+            if (!confirm('Are you sure you want to remove this shift?')) return;
+            try {
+                await ShiftAPI.delete(shiftId);
+                if (window.Toast) window.Toast.success('Shift cancelled successfully.');
+                await loadShiftScheduler();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        window.onload = () => {
+            loadDoctorsDropdown();
+            loadShiftScheduler();
+        };
+    </script>
+</body>
+</html>
