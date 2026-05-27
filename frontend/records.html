@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records | PG Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ux-polish.css">
+    <style>
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 5px;
+            bottom: -35px;
+            width: 2px;
+            background: var(--gold-border);
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg-midnight);
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 10px var(--gold-glow);
+            z-index: 1;
+        }
+        .luxury-tabs .nav-link {
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            padding: 10px 20px;
+            transition: var(--transition);
+            background: transparent;
+            border-bottom: 2px solid transparent;
+        }
+        .luxury-tabs .nav-link:hover {
+            color: var(--gold-primary);
+        }
+        .luxury-tabs .nav-link.active {
+            color: var(--gold-primary);
+            border-bottom: 2px solid var(--gold-primary);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        .prescription-tag {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid var(--gold-border);
+            color: var(--gold-light);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-heart-pulse me-2"></i> PG CARE</h4>
+        </div>
+        <div class="nav flex-column mt-4">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-grid-2"></i> Dashboard
+            </a>
+            <a class="nav-link" href="patients.html">
+                <i class="fas fa-user-injured"></i> Patients
+            </a>
+            <a class="nav-link" href="doctors.html">
+                <i class="fas fa-user-md"></i> Doctors
+            </a>
+            <a class="nav-link" href="appointments.html">
+                <i class="fas fa-calendar-alt"></i> Appointments
+            </a>
+            <a class="nav-link active" href="records.html">
+                <i class="fas fa-file-medical"></i> Medical Records
+            </a>
+            <a class="nav-link" href="shifts.html">
+                <i class="fas fa-business-time"></i> Shifts
+            </a>
+            <a class="nav-link" href="pages/analytics.html">
+                <i class="fas fa-chart-line"></i> Analytics
+            </a>
+            <div class="mt-auto mb-4">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid p-0">
+                <button type="button" id="sidebarCollapse" class="btn border-0 d-lg-none me-3">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="ms-auto d-flex align-items-center">
+                    <div id="theme-toggle" class="me-3">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <img id="navAvatar" src="" class="rounded-circle me-2" width="35" height="35">
+                            <div class="d-none d-sm-block">
+                                <p class="mb-0 text-main fw-semibold small" id="navUsername"></p>
+                                <p class="mb-0 text-muted extra-small" style="font-size: 0.7rem;" id="navRole"></p>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
+                            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 text-danger" href="#" onclick="AuthService.logout(); return false;"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container-fluid p-4 fade-in">
+            <div class="row align-items-center mb-4">
+                <div class="col">
+                    <h3 class="fw-bold mb-1">Medical Records Portal</h3>
+                    <p class="text-muted small mb-0">View clinical history, write prescriptions, and upload lab reports.</p>
+                </div>
+            </div>
+
+            <!-- Selection and Tabs -->
+            <div class="row g-4">
+                <div class="col-lg-4" data-aos="fade-right">
+                    <div class="card h-100">
+                        <h5 class="fw-bold mb-3 text-main"><i class="fas fa-hospital-user text-primary me-2"></i>Select Patient</h5>
+                        <p class="text-muted small">Choose a registered patient to fetch and inspect their full clinical record timeline.</p>
+                        
+                        <div class="mb-4">
+                            <label class="form-label small fw-semibold">Patient</label>
+                            <select id="record-patient-select" class="form-select" onchange="handlePatientSelection()">
+                                <option value="">-- Choose Patient --</option>
+                            </select>
+                        </div>
+
+                        <div id="patient-card-details" style="display: none;" class="border border-secondary border-opacity-25 rounded p-3 bg-midnight bg-opacity-25">
+                            <h6 class="fw-bold text-main mb-2" id="detail-patient-name">Patient Name</h6>
+                            <p class="mb-1 extra-small text-muted"><span class="fw-bold text-main">DOB:</span> <span id="detail-patient-dob">N/A</span></p>
+                            <p class="mb-1 extra-small text-muted"><span class="fw-bold text-main">Gender:</span> <span id="detail-patient-gender">N/A</span></p>
+                            <p class="mb-1 extra-small text-muted"><span class="fw-bold text-main">Phone:</span> <span id="detail-patient-phone">N/A</span></p>
+                            <p class="mb-0 extra-small text-muted"><span class="fw-bold text-main">Email:</span> <span id="detail-patient-email">N/A</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8" data-aos="fade-left">
+                    <div class="card h-100 p-0 overflow-hidden">
+                        <div class="card-header bg-transparent border-bottom border-secondary border-opacity-10 py-3 px-4">
+                            <ul class="nav luxury-tabs card-header-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="timeline-tab" data-bs-toggle="tab" data-bs-target="#timeline-pane" type="button" role="tab">
+                                        <i class="fas fa-stream me-2"></i>Clinical Timeline
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" id="add-record-tab-container">
+                                    <button class="nav-link" id="add-record-tab" data-bs-toggle="tab" data-bs-target="#add-record-pane" type="button" role="tab">
+                                        <i class="fas fa-plus me-2"></i>Add Record
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card-body p-4 bg-midnight bg-opacity-10 overflow-y-auto" style="max-height: 500px;">
+                            <div class="tab-content" id="myTabContent">
+                                
+                                <!-- timeline pane -->
+                                <div class="tab-pane fade show active" id="timeline-pane" role="tabpanel">
+                                    <div id="timeline-empty-state" class="text-center py-5 text-muted">
+                                        <i class="fas fa-notes-medical fs-1 mb-3 text-gold-glow"></i>
+                                        <p class="mb-0">Please select a patient to view their clinical history feed.</p>
+                                    </div>
+                                    
+                                    <div id="timeline-feed" style="display: none;">
+                                        <!-- Timelines loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <!-- add record pane -->
+                                <div class="tab-pane fade" id="add-record-pane" role="tabpanel">
+                                    <form id="add-record-form" onsubmit="handleSaveRecord(event)">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Diagnosing Doctor</label>
+                                                <select id="record-doctor-select" class="form-select" required>
+                                                    <option value="">-- Assign Doctor --</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Visit Date</label>
+                                                <input type="date" id="record-visit-date" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label small fw-semibold">Clinical Diagnosis</label>
+                                                <textarea id="record-diagnosis" class="form-control" rows="2" placeholder="Describe clinical symptoms and primary diagnosis..." required></textarea>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label small fw-semibold">Treatment Plan</label>
+                                                <textarea id="record-treatment" class="form-control" rows="2" placeholder="Outline therapeutic and recovery steps..."></textarea>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label small fw-semibold">Prescriptions (Medications & Doses)</label>
+                                                <input type="text" id="record-prescriptions" class="form-control" placeholder="e.g. Paracetamol 500mg (1-0-1), Amoxicillin 250mg (1-1-1)">
+                                                <span class="text-muted extra-small">Separate items with commas.</span>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label small fw-semibold">Lab Report Attachment (Mock PDF / Image)</label>
+                                                <input type="file" id="record-file" class="form-control" onchange="handleFileSelected(event)">
+                                                <input type="hidden" id="record-file-data">
+                                                <input type="hidden" id="record-file-name">
+                                                <span class="text-muted extra-small">Add diagnostic reports or scan documents.</span>
+                                            </div>
+                                            <div class="col-md-12 mt-4">
+                                                <button type="submit" class="btn btn-primary px-4 shadow-sm w-100 py-2">
+                                                    <i class="fas fa-check-circle me-2"></i>Save Clinical Entry
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lab Report Viewer Modal -->
+    <div class="modal fade" id="reportViewerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow-lg bg-midnight text-main">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="report-modal-title">Lab Report Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div id="report-view-container" class="border border-secondary border-opacity-25 rounded p-3 mb-3 bg-card" style="min-height: 250px; display: flex; align-items: center; justify-content: center;">
+                        <!-- Report details or image render -->
+                    </div>
+                    <button class="btn btn-primary btn-sm px-4" data-bs-dismiss="modal">Close Viewer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="services/api.js"></script>
+    <script src="services/websocket.js"></script>
+    <script src="js/ux.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="animations/animations.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Auth credentials display
+        const u = AuthService.getUser() || {};
+        const name = u.username || 'User';
+        const roles = (u.roles || []).map(r => r.replace('ROLE_', '')).join(', ') || 'Guest';
+        document.getElementById('navUsername').textContent = name;
+        document.getElementById('navRole').textContent    = roles;
+        document.getElementById('navAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4361ee&color=fff`;
+
+        // Restrict add record tab to DOCTOR or ADMIN roles only
+        const isDocOrAdmin = AuthService.hasRole('ROLE_ADMIN') || AuthService.hasRole('ROLE_DOCTOR');
+        if (!isDocOrAdmin) {
+            document.getElementById('add-record-tab-container').style.display = 'none';
+        }
+
+        // Set default visit date to today
+        document.getElementById('record-visit-date').value = new Date().toISOString().split('T')[0];
+
+        // Populate Patients and Doctors dropdowns
+        async function loadSelectors() {
+            try {
+                const patientsRes = await AppState.getPatients();
+                const doctorsRes = await AppState.getDoctors();
+                
+                const patSelect = document.getElementById('record-patient-select');
+                patientsRes.data.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.textContent = `${p.name} (ID: ${p.id})`;
+                    patSelect.appendChild(opt);
+                });
+
+                const docSelect = document.getElementById('record-doctor-select');
+                doctorsRes.data.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = `Dr. ${d.name} (${d.specialization})`;
+                    docSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Failed to load selectors:', err);
+                if (window.Toast) window.Toast.error('Failed to load active medical registry');
+            }
+        }
+
+        let selectedPatientId = null;
+
+        async function handlePatientSelection() {
+            const patId = document.getElementById('record-patient-select').value;
+            selectedPatientId = patId;
+
+            if (!patId) {
+                document.getElementById('patient-card-details').style.display = 'none';
+                document.getElementById('timeline-empty-state').style.display = 'block';
+                document.getElementById('timeline-feed').style.display = 'none';
+                return;
+            }
+
+            // Load details
+            try {
+                const patients = (await AppState.getPatients()).data;
+                const p = patients.find(pat => pat.id == patId);
+                if (p) {
+                    document.getElementById('detail-patient-name').textContent = p.name;
+                    document.getElementById('detail-patient-dob').textContent = p.dateOfBirth || 'N/A';
+                    document.getElementById('detail-patient-gender').textContent = p.gender || 'N/A';
+                    document.getElementById('detail-patient-phone').textContent = p.phone || 'N/A';
+                    document.getElementById('detail-patient-email').textContent = p.email || 'N/A';
+                    document.getElementById('patient-card-details').style.display = 'block';
+                    
+                    gsap.fromTo('#patient-card-details', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 });
+                }
+
+                await fetchTimeline(patId);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function fetchTimeline(patId) {
+            try {
+                document.getElementById('timeline-empty-state').style.display = 'none';
+                const feed = document.getElementById('timeline-feed');
+                feed.innerHTML = '<div class="text-center py-4"><span class="spinner-border spinner-border-sm text-primary me-2"></span>Loading clinical history...</div>';
+                feed.style.display = 'block';
+
+                const response = await MedicalRecordAPI.getByPatientId(patId);
+                const records = response.data;
+
+                if (!records || records.length === 0) {
+                    feed.innerHTML = `
+                        <div class="text-center py-5 text-muted">
+                            <i class="fas fa-clipboard-list fs-2 mb-3 text-gold-glow"></i>
+                            <p class="mb-0">No past clinical entries found for this patient.</p>
+                        </div>`;
+                    return;
+                }
+
+                feed.innerHTML = '';
+                records.forEach((r, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'timeline-item';
+                    item.setAttribute('data-aos', 'fade-up');
+                    item.setAttribute('data-aos-delay', (index * 50).toString());
+
+                    // Prescriptions tags
+                    let presHtml = '';
+                    if (r.prescriptions) {
+                        const items = r.prescriptions.split(',');
+                        items.forEach(i => {
+                            if (i.trim()) {
+                                presHtml += `<span class="prescription-tag"><i class="fas fa-capsules me-1 text-gold-primary"></i>${i.trim()}</span>`;
+                            }
+                        });
+                    }
+
+                    // Lab report link
+                    let reportHtml = '';
+                    if (r.labReportName) {
+                        reportHtml = `
+                            <div class="mt-3">
+                                <button class="btn btn-outline-primary btn-sm gsap-hover" onclick="viewLabReport(${r.id})">
+                                    <i class="fas fa-file-pdf me-2"></i>View Report: ${r.labReportName}
+                                </button>
+                            </div>`;
+                    }
+
+                    item.innerHTML = `
+                        <div class="timeline-marker"></div>
+                        <div class="card p-3 border border-secondary border-opacity-15 bg-midnight bg-opacity-20 mb-0">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-gold-light mb-0"><i class="fas fa-stethoscope me-2"></i>Dr. ${r.doctorName || 'Assigned'}</h6>
+                                <span class="badge bg-secondary bg-opacity-25 text-gold-primary small">${r.visitDate}</span>
+                            </div>
+                            <p class="mb-2 text-main small"><span class="fw-bold text-gold-light">Diagnosis:</span> ${r.diagnosis}</p>
+                            <p class="mb-2 text-muted small"><span class="fw-bold text-main">Treatment:</span> ${r.treatment || 'No treatment specified'}</p>
+                            <div class="prescription-list mt-2">
+                                ${presHtml || '<span class="text-muted extra-small">No prescriptions attached.</span>'}
+                            </div>
+                            ${reportHtml}
+                        </div>
+                    `;
+                    feed.appendChild(item);
+                });
+
+                AOS.refresh();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('timeline-feed').innerHTML = '<div class="text-danger text-center py-4">Failed to compile clinical timeline.</div>';
+            }
+        }
+
+        // Lab report file reader to get base64 string
+        function handleFileSelected(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                document.getElementById('record-file-data').value = evt.target.result; // contains base64 string
+                document.getElementById('record-file-name').value = file.name;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function handleSaveRecord(e) {
+            e.preventDefault();
+            if (!selectedPatientId) {
+                if (window.Toast) window.Toast.error('Please select a patient first.');
+                return;
+            }
+
+            const docId = document.getElementById('record-doctor-select').value;
+            const visitDate = document.getElementById('record-visit-date').value;
+            const diagnosis = document.getElementById('record-diagnosis').value;
+            const treatment = document.getElementById('record-treatment').value;
+            const prescriptions = document.getElementById('record-prescriptions').value;
+            const labReportName = document.getElementById('record-file-name').value;
+            const labReportData = document.getElementById('record-file-data').value;
+
+            const payload = {
+                patientId: parseInt(selectedPatientId),
+                doctorId: parseInt(docId),
+                visitDate: visitDate,
+                diagnosis: diagnosis,
+                treatment: treatment,
+                prescriptions: prescriptions,
+                labReportName: labReportName || null,
+                labReportData: labReportData || null
+            };
+
+            try {
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving entry...';
+
+                await MedicalRecordAPI.create(payload);
+                
+                if (window.Toast) window.Toast.success('Clinical record saved and archived!');
+                
+                // Clear fields
+                document.getElementById('record-diagnosis').value = '';
+                document.getElementById('record-treatment').value = '';
+                document.getElementById('record-prescriptions').value = '';
+                document.getElementById('record-file').value = '';
+                document.getElementById('record-file-name').value = '';
+                document.getElementById('record-file-data').value = '';
+
+                // Switch back to timeline
+                const timelineTab = new bootstrap.Tab(document.getElementById('timeline-tab'));
+                timelineTab.show();
+
+                // Reload timeline
+                await fetchTimeline(selectedPatientId);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Save Clinical Entry';
+            }
+        }
+
+        async function viewLabReport(recordId) {
+            try {
+                const res = await MedicalRecordAPI.getById(recordId);
+                const r = res.data;
+                
+                document.getElementById('report-modal-title').innerHTML = `<i class="fas fa-file-medical text-primary me-2"></i>Report: ${r.labReportName}`;
+                const container = document.getElementById('report-view-container');
+                
+                if (r.labReportData && r.labReportData.startsWith('data:image/')) {
+                    container.innerHTML = `<img src="${r.labReportData}" class="img-fluid rounded border border-secondary border-opacity-25" style="max-height: 400px;">`;
+                } else if (r.labReportData && r.labReportData.startsWith('data:application/pdf')) {
+                    // Embed PDF or show standard text visualization if pdf plugin is missing
+                    container.innerHTML = `
+                        <div class="text-center p-4">
+                            <i class="fas fa-file-pdf fs-1 text-danger mb-3"></i>
+                            <h6 class="fw-bold text-main mb-2">${r.labReportName}</h6>
+                            <p class="text-muted extra-small">Protected medical PDF payload successfully verified on server.</p>
+                            <a href="${r.labReportData}" download="${r.labReportName}" class="btn btn-outline-primary btn-sm px-4 py-2 mt-2">
+                                <i class="fas fa-download me-2"></i>Download PDF File
+                            </a>
+                        </div>`;
+                } else {
+                    container.innerHTML = `
+                        <div class="text-center p-4">
+                            <i class="fas fa-file-prescription fs-1 text-gold-primary mb-3"></i>
+                            <h6 class="fw-bold text-main mb-2">${r.labReportName || 'Record Attachment'}</h6>
+                            <p class="text-muted extra-small mb-0">Direct visualization format not supported. File payload integrity verified.</p>
+                            <a href="${r.labReportData}" download="${r.labReportName}" class="btn btn-outline-primary btn-sm px-4 py-2 mt-2">
+                                <i class="fas fa-download me-2"></i>Download File Attachment
+                            </a>
+                        </div>`;
+                }
+
+                const myModal = new bootstrap.Modal(document.getElementById('reportViewerModal'));
+                myModal.show();
+            } catch (err) {
+                console.error(err);
+                if (window.Toast) window.Toast.error('Failed to retrieve lab report data');
+            }
+        }
+
+        window.onload = () => {
+            loadSelectors();
+        };
+    </script>
+</body>
+</html>

@@ -9,7 +9,9 @@ const AppState = {
         patients: null,
         doctors: null,
         appointments: null,
-        analytics: null
+        analytics: null,
+        records: null,
+        shifts: null
     },
 
     // Cache timestamps (last fetched)
@@ -17,7 +19,9 @@ const AppState = {
         patients: 0,
         doctors: 0,
         appointments: 0,
-        analytics: 0
+        analytics: 0,
+        records: 0,
+        shifts: 0
     },
 
     // Active fetching promises to coalesce duplicate calls
@@ -25,7 +29,9 @@ const AppState = {
         patients: null,
         doctors: null,
         appointments: null,
-        analytics: null
+        analytics: null,
+        records: null,
+        shifts: null
     },
 
     // Cache duration: 30 seconds
@@ -155,8 +161,67 @@ const AppState = {
                 this.fetchPromises.analytics = null;
             }
         })();
-
         return this.fetchPromises.analytics;
+    },
+
+    // ─── Medical Records Caching & Getters ────────────────────────────────────
+    async getRecords(forceFetch = false) {
+        const now = Date.now();
+        const isCacheValid = this.cache.records && (now - this.lastFetch.records < this.cacheTTL);
+
+        if (isCacheValid && !forceFetch) {
+            console.log('[AppState] Returning cached records');
+            return { data: this.cache.records };
+        }
+
+        if (this.fetchPromises.records) {
+            console.log('[AppState] Deduplicating records fetch...');
+            return this.fetchPromises.records;
+        }
+
+        console.log('[AppState] Fetching medical records from API...');
+        this.fetchPromises.records = (async () => {
+            try {
+                const response = await MedicalRecordAPI.getAll();
+                this.cache.records = response.data;
+                this.lastFetch.records = Date.now();
+                return response;
+            } finally {
+                this.fetchPromises.records = null;
+            }
+        })();
+
+        return this.fetchPromises.records;
+    },
+
+    // ─── Shifts Caching & Getters ─────────────────────────────────────────────
+    async getShifts(forceFetch = false) {
+        const now = Date.now();
+        const isCacheValid = this.cache.shifts && (now - this.lastFetch.shifts < this.cacheTTL);
+
+        if (isCacheValid && !forceFetch) {
+            console.log('[AppState] Returning cached shifts');
+            return { data: this.cache.shifts };
+        }
+
+        if (this.fetchPromises.shifts) {
+            console.log('[AppState] Deduplicating shifts fetch...');
+            return this.fetchPromises.shifts;
+        }
+
+        console.log('[AppState] Fetching shifts from API...');
+        this.fetchPromises.shifts = (async () => {
+            try {
+                const response = await ShiftAPI.getAll();
+                this.cache.shifts = response.data;
+                this.lastFetch.shifts = Date.now();
+                return response;
+            } finally {
+                this.fetchPromises.shifts = null;
+            }
+        })();
+
+        return this.fetchPromises.shifts;
     },
 
     // ─── Cache Invalidation & Mutations ──────────────────────────────────────
@@ -171,6 +236,8 @@ const AppState = {
         this.invalidate('doctors');
         this.invalidate('appointments');
         this.invalidate('analytics');
+        this.invalidate('records');
+        this.invalidate('shifts');
     },
 
     // ─── Optimistic Mutations & Rollbacks ────────────────────────────────────

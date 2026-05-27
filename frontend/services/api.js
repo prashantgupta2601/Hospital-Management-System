@@ -180,3 +180,29 @@ const AnalyticsAPI = {
     getDashboardStats:     () => apiClient.get('/analytics/dashboard-stats'),
     getSummary:            () => apiClient.get('/analytics/summary')
 };
+
+const MedicalRecordAPI = {
+    getAll:         ()           => apiClient.get('/medical-records'),
+    getById:        (id)         => apiClient.get(`/medical-records/${id}`),
+    getByPatientId: (patientId)  => apiClient.get(`/medical-records/patient/${patientId}`),
+    getByDoctorId:  (doctorId)   => apiClient.get(`/medical-records/doctor/${doctorId}`),
+    create:         (data)       => apiClient.post('/medical-records', data),
+    delete:         (id)         => apiClient.delete(`/medical-records/${id}`)
+};
+
+const ShiftAPI = {
+    getAll:         ()           => apiClient.get('/shifts'),
+    getByDoctorId:  (doctorId)   => apiClient.get(`/shifts/doctor/${doctorId}`),
+    create:         (data)       => apiClient.post('/shifts', data),
+    update:         (id, data)   => apiClient.put(`/shifts/${id}`, data),
+    delete:         (id)         => apiClient.delete(`/shifts/${id}`)
+};
+
+const BillingAPI = {
+    getAll:              ()           => apiClient.get('/billings'),
+    getById:             (id)         => apiClient.get(`/billings/${id}`),
+    create:              (data)       => apiClient.post('/billings', data),
+    getByPatientId:      (patientId)  => apiClient.get(`/billings/patient/${patientId}`),
+    updatePaymentStatus: (id, status) => apiClient.patch(`/billings/${id}/payment-status?status=${status}`),
+    getReceipt:          (id)         => apiClient.get(`/billings/${id}/receipt`, { responseType: 'blob' })
+};

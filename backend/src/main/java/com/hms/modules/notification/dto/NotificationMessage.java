@@ -21,6 +21,9 @@ public class NotificationMessage {
         APPOINTMENT_UPDATED,
         APPOINTMENT_CANCELLED,
         APPOINTMENT_COMPLETED,
+        MEDICAL_RECORD_CREATED,
+        SHIFT_UPDATED,
+        BILLING_PAID,
         GENERAL
     }
 
