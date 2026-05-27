@@ -91,6 +91,13 @@ apiClient.interceptors.response.use(response => {
     if (window.ServerUnavailableScreen) {
         window.ServerUnavailableScreen.hide();
     }
+    
+    // Auto-unwrap enterprise Global API Response envelope transparently
+    if (response.data && typeof response.data === 'object' && response.data.hasOwnProperty('status') && response.data.hasOwnProperty('data') && response.data.hasOwnProperty('message')) {
+        console.log('[apiClient] Unwrapping enterprise response message:', response.data.message);
+        response.data = response.data.data;
+    }
+    
     return response;
 }, error => {
     // Check if offline cancelation
