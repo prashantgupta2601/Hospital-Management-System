@@ -30,6 +30,9 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Override
     @Transactional
     public MedicalRecordDTO createMedicalRecord(MedicalRecordDTO dto) {
+        // Validate file uploads before persist
+        validateLabReport(dto.getLabReportName(), dto.getLabReportData());
+
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + dto.getPatientId()));
 
@@ -118,5 +121,40 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .labReportName(dto.getLabReportName())
                 .labReportData(dto.getLabReportData())
                 .build();
+    }
+
+    private void validateLabReport(String labReportName, String labReportData) {
+        if (labReportData == null || labReportData.trim().isEmpty()) {
+            return; // No file uploaded
+        }
+
+        if (labReportName == null || labReportName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Lab report name cannot be empty when file data is present");
+        }
+        
+        String lowerName = labReportName.toLowerCase();
+        if (!lowerName.endsWith(".pdf") && !lowerName.endsWith(".png") && !lowerName.endsWith(".jpg") && !lowerName.endsWith(".jpeg")) {
+            throw new IllegalArgumentException("Invalid file type. Only PDF, PNG, and JPG/JPEG files are allowed.");
+        }
+
+        if (!labReportData.startsWith("data:application/pdf;base64,") &&
+            !labReportData.startsWith("data:image/png;base64,") &&
+            !labReportData.startsWith("data:image/jpeg;base64,") &&
+            !labReportData.startsWith("data:image/jpg;base64,")) {
+            throw new IllegalArgumentException("Unapproved file content or invalid base64 encoding prefix.");
+        }
+
+        int commaIndex = labReportData.indexOf(",");
+        if (commaIndex == -1) {
+            throw new IllegalArgumentException("Malformed base64 file data.");
+        }
+        String base64Content = labReportData.substring(commaIndex + 1);
+        
+        long calculatedSize = (base64Content.length() * 3) / 4;
+        long maxSizeLimit = 5 * 1024 * 1024; // 5MB
+        
+        if (calculatedSize > maxSizeLimit) {
+            throw new IllegalArgumentException("File size exceeds the maximum limit of 5MB.");
+        }
     }
 }

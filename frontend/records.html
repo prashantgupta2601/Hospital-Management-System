@@ -233,7 +233,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label small fw-semibold">Lab Report Attachment (Mock PDF / Image)</label>
-                                                <input type="file" id="record-file" class="form-control" onchange="handleFileSelected(event)">
+                                                <input type="file" id="record-file" class="form-control" accept=".pdf,.png,.jpg,.jpeg" onchange="handleFileSelected(event)">
                                                 <input type="hidden" id="record-file-data">
                                                 <input type="hidden" id="record-file-name">
                                                 <span class="text-muted extra-small">Add diagnostic reports or scan documents.</span>
@@ -446,6 +446,30 @@
         function handleFileSelected(e) {
             const file = e.target.files[0];
             if (!file) return;
+
+            // 1. File type validation
+            const allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
+            if (!allowedExtensions.exec(file.name)) {
+                if (window.Toast) {
+                    window.Toast.error("Invalid file type! Only PDF, PNG, and JPG/JPEG files are allowed.");
+                } else {
+                    alert("Invalid file type! Only PDF, PNG, and JPG/JPEG files are allowed.");
+                }
+                e.target.value = ''; // Reset input
+                return;
+            }
+
+            // 2. File size validation (max 5MB)
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                if (window.Toast) {
+                    window.Toast.error("File is too large! Maximum allowed size is 5MB.");
+                } else {
+                    alert("File is too large! Maximum allowed size is 5MB.");
+                }
+                e.target.value = ''; // Reset input
+                return;
+            }
 
             const reader = new FileReader();
             reader.onload = function(evt) {
