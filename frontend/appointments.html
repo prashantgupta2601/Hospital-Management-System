@@ -115,6 +115,34 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Billing & Invoices Section -->
+            <div class="card mt-4" data-aos="fade-up" data-aos-delay="100">
+                <h5 class="fw-bold text-main mb-4"><i class="fas fa-file-invoice-dollar text-primary me-2"></i>Clinical Billing & Invoices</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="billing-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Patient Name</th>
+                                <th>Appointment ID</th>
+                                <th>Amount</th>
+                                <th>Invoice Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billing-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted small">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Loading active invoice registries...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -173,6 +201,82 @@
                             <p class="text-muted small">The appointment has been successfully scheduled.</p>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mock Payment Gateway Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg bg-midnight text-main">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-shield-alt text-primary me-2"></i>Secure Payment Gateway</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div id="checkout-form-container">
+                        <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded border border-secondary border-opacity-10 bg-midnight bg-opacity-20">
+                            <div>
+                                <h6 class="fw-bold mb-0 text-gold-light">Consultation invoice due:</h6>
+                                <p class="extra-small text-muted mb-0" id="checkout-invoice-id">Invoice ID: #--</p>
+                            </div>
+                            <h4 class="fw-bold text-gold-primary mb-0" id="checkout-amount">$0.00</h4>
+                        </div>
+
+                        <form id="checkoutForm" onsubmit="handleMockPaymentSubmit(event)">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-semibold">Cardholder Name</label>
+                                    <input type="text" class="form-control" placeholder="John Doe" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-semibold">Credit/Debit Card Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-secondary border-opacity-25 text-muted"><i class="far fa-credit-card"></i></span>
+                                        <input type="text" class="form-control border-start-0" placeholder="4111 2222 3333 4444" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Expiry Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">CVV Code</label>
+                                    <input type="password" class="form-control" placeholder="***" required maxLength="3">
+                                </div>
+                                <div class="col-md-12 mt-4">
+                                    <button type="submit" class="btn btn-primary w-100 py-2">
+                                        <i class="fas fa-lock me-2"></i>Authorize Encrypted Payment
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="checkout-loading-container" style="display: none;" class="text-center py-5">
+                        <div class="spinner-border text-primary fs-3 mb-3" style="width: 3rem; height: 3rem;"></div>
+                        <h5 class="fw-bold text-gold-light">Authorizing Transaction...</h5>
+                        <p class="text-muted small">Please do not refresh or close this connection.</p>
+                    </div>
+
+                    <div id="checkout-success-container" style="display: none;" class="text-center py-5">
+                        <i class="fas fa-check-circle text-success fs-1 mb-3" style="font-size: 3.5rem !important; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));"></i>
+                        <h4 class="fw-bold text-gold-light">Payment Successful!</h4>
+                        <p class="text-muted small mb-4">Transaction authenticated. Invoice paid in full.</p>
+                        <div class="row g-2 px-4">
+                            <div class="col-6">
+                                <button class="btn btn-outline-primary w-100 py-2 btn-sm" onclick="downloadActiveReceipt()">
+                                    <i class="fas fa-download me-2"></i>Receipt PDF
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-primary w-100 py-2 btn-sm" data-bs-dismiss="modal">
+                                    Done
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -253,6 +357,148 @@
         document.getElementById('navUsername').textContent = name;
         document.getElementById('navRole').textContent    = roles;
         document.getElementById('navAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4361ee&color=fff`;
+
+        // ─── Billing Management Client Code ──────────────────────────────────────
+        let activeBillingId = null;
+
+        async function loadBillingTable() {
+            try {
+                const response = await BillingAPI.getAll();
+                const billings = response.data;
+                const tbody = document.getElementById('billing-table-body');
+                tbody.innerHTML = '';
+
+                if (billings.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted small py-4">No active invoices found.</td></tr>';
+                    return;
+                }
+
+                billings.forEach(b => {
+                    const tr = document.createElement('tr');
+                    
+                    let statusBadge = '';
+                    let actionButton = '';
+
+                    if (b.paymentStatus === 'PAID') {
+                        statusBadge = '<span class="badge bg-success bg-opacity-15 text-gold-light">Paid</span>';
+                        actionButton = `
+                            <button class="btn btn-outline-primary btn-sm px-3 gsap-hover border border-primary border-opacity-25" onclick="downloadReceiptPdf(${b.id})">
+                                <i class="fas fa-file-pdf me-2"></i>Download Receipt
+                            </button>
+                        `;
+                    } else if (b.paymentStatus === 'PENDING') {
+                        statusBadge = '<span class="badge bg-warning bg-opacity-15 text-warning">Pending</span>';
+                        actionButton = `
+                            <button class="btn btn-primary btn-sm px-3 gsap-hover" onclick="initiateCheckout(${b.id}, ${b.amount})">
+                                <i class="fas fa-credit-card me-2"></i>Pay Bill
+                            </button>
+                        `;
+                    } else {
+                        statusBadge = '<span class="badge bg-danger bg-opacity-15 text-danger">Failed</span>';
+                        actionButton = `
+                            <button class="btn btn-primary btn-sm px-3 gsap-hover" onclick="initiateCheckout(${b.id}, ${b.amount})">
+                                <i class="fas fa-redo me-2"></i>Retry Pay
+                            </button>
+                        `;
+                    }
+
+                    tr.innerHTML = `
+                        <td>#${b.id}</td>
+                        <td class="fw-semibold text-gold-light">${b.patientName || 'Patient'}</td>
+                        <td>#${b.appointmentId}</td>
+                        <td class="fw-bold text-main">$${b.amount}</td>
+                        <td class="text-muted small">${new Date(b.createdAt || b.invoiceDate).toLocaleString()}</td>
+                        <td>${statusBadge}</td>
+                        <td>${actionButton}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('billing-table-body').innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">Failed to load invoices.</td></tr>';
+            }
+        }
+
+        function initiateCheckout(billingId, amount) {
+            activeBillingId = billingId;
+            document.getElementById('checkout-invoice-id').textContent = `Invoice ID: #${billingId}`;
+            document.getElementById('checkout-amount').textContent = `$${amount.toFixed(2)}`;
+            
+            // Show form, hide loader and success
+            document.getElementById('checkout-form-container').style.display = 'block';
+            document.getElementById('checkout-loading-container').style.display = 'none';
+            document.getElementById('checkout-success-container').style.display = 'none';
+
+            const myModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+            myModal.show();
+        }
+
+        async function handleMockPaymentSubmit(e) {
+            e.preventDefault();
+            if (!activeBillingId) return;
+
+            // Transition to loading
+            document.getElementById('checkout-form-container').style.display = 'none';
+            document.getElementById('checkout-loading-container').style.display = 'block';
+
+            // Wait 1.8 seconds (mock authentication)
+            setTimeout(async () => {
+                try {
+                    await BillingAPI.updatePaymentStatus(activeBillingId, 'PAID');
+                    
+                    if (window.Toast) window.Toast.success('Payment successfully authorized!');
+                    
+                    // Reload table
+                    await loadBillingTable();
+
+                    // Transition to success screen
+                    document.getElementById('checkout-loading-container').style.display = 'none';
+                    document.getElementById('checkout-success-container').style.display = 'block';
+                } catch (err) {
+                    console.error(err);
+                    document.getElementById('checkout-loading-container').style.display = 'none';
+                    document.getElementById('checkout-form-container').style.display = 'block';
+                    if (window.Toast) window.Toast.error('Transaction declined. Please try again.');
+                }
+            }, 1800);
+        }
+
+        async function downloadReceiptPdf(billingId) {
+            try {
+                const response = await axios.get(`http://localhost:8081/api/billings/${billingId}/receipt`, {
+                    headers: {
+                        'Authorization': 'Bearer ' + AuthService.getToken()
+                    },
+                    responseType: 'blob'
+                });
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `receipt-${billingId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+                if (window.Toast) window.Toast.success("Invoice PDF downloaded successfully!");
+            } catch (err) {
+                console.error(err);
+                if (window.Toast) window.Toast.error("Failed to fetch invoice PDF");
+            }
+        }
+
+        function downloadActiveReceipt() {
+            if (activeBillingId) {
+                downloadReceiptPdf(activeBillingId);
+            }
+        }
+
+        // Hook loading into window load
+        const originalOnload = window.onload;
+        window.onload = async () => {
+            if (typeof originalOnload === 'function') originalOnload();
+            await loadBillingTable();
+        };
     </script>
 </body>
 </html>
