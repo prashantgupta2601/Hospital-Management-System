@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.http.HttpMethod;
 import java.util.List;
 
 @Configuration
@@ -76,8 +77,12 @@ public class WebSecurityConfig {
                 .requestMatchers("/ws/**").permitAll()
                 // H2 console (dev only)
                 .requestMatchers("/h2-console/**").permitAll()
-                // Admin-only endpoints
-                .requestMatchers("/api/billing/**").hasRole("ADMIN")
+                // Admin-only endpoints (Plural billing routes secured)
+                .requestMatchers("/api/billings/patient/**").hasAnyRole("ADMIN", "PATIENT")
+                .requestMatchers("/api/billings/*/receipt").hasAnyRole("ADMIN", "PATIENT")
+                .requestMatchers("/api/billings/*/payment-status").hasAnyRole("ADMIN", "PATIENT")
+                .requestMatchers(HttpMethod.GET, "/api/billings/*").hasAnyRole("ADMIN", "PATIENT")
+                .requestMatchers("/api/billings/**").hasRole("ADMIN")
                 // Analytics
                 .requestMatchers("/api/analytics/**").hasAnyRole("ADMIN", "DOCTOR")
                 // Doctor and Admin
@@ -85,6 +90,12 @@ public class WebSecurityConfig {
                 // Doctor, Admin (patient management)
                 .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "DOCTOR")
                 .requestMatchers("/api/patients/**").hasAnyRole("ADMIN", "DOCTOR")
+                // Shifts (Admin and Doctor)
+                .requestMatchers("/api/shifts/**").hasAnyRole("ADMIN", "DOCTOR")
+                // Medical Records (Patients can read their own records, Doctors/Admins manage them)
+                .requestMatchers("/api/medical-records/patient/**").hasAnyRole("ADMIN", "DOCTOR", "PATIENT")
+                .requestMatchers(HttpMethod.GET, "/api/medical-records/*").hasAnyRole("ADMIN", "DOCTOR", "PATIENT")
+                .requestMatchers("/api/medical-records/**").hasAnyRole("ADMIN", "DOCTOR")
                 // Everything else requires authentication
                 .anyRequest().authenticated()
             )

@@ -358,12 +358,73 @@ const InactivityTracker = {
     }
 };
 
-// ─── 8. Global Exports & Run ─────────────────────────────────────────────────
+// ─── 8. Role-Based UI Elements Hardening Engine ──────────────────────────────
+const RoleBasedUI = {
+    init() {
+        // Safe check for AuthService existence
+        if (typeof AuthService === 'undefined') return;
+        const u = AuthService.getUser();
+        if (!u) return;
+
+        const roles = u.roles || [];
+        const isAdmin = roles.includes('ROLE_ADMIN');
+        const isDoctor = roles.includes('ROLE_DOCTOR');
+        const isUser = roles.includes('ROLE_USER') || roles.includes('ROLE_PATIENT');
+
+        console.log('[RoleBasedUI] Hardening views for roles:', roles.join(', '));
+
+        if (!isAdmin) {
+            // Hide database administration tables and links for patients
+            if (isUser) {
+                this.hideElements('[href="shifts.html"]');
+                this.hideElements('[href="doctors.html"]');
+            }
+        }
+
+        if (isDoctor) {
+            // Hide system configuration sections and record registers
+            this.hideElements('[data-bs-target="#addPatientModal"]');
+            this.hideElements('.admin-actions');
+            this.hideElements('[href="pages/analytics.html"]');
+            this.disableControls('.btn-delete-patient, .btn-delete-doctor');
+        }
+
+        if (isUser) {
+            // Patients can only view records and invoices. Hide creation, scheduling, and admin features.
+            this.hideElements('[data-bs-target="#addPatientModal"]');
+            this.hideElements('[data-bs-target="#addDoctorModal"]');
+            this.hideElements('[data-bs-target="#bookAppointmentModal"]');
+            this.hideElements('[data-bs-target="#addShiftModal"]');
+            this.hideElements('#add-record-tab-container');
+            this.hideElements('.admin-actions');
+            this.hideElements('[href="pages/analytics.html"]');
+            this.disableControls('.btn-delete, button[onclick^="handleDelete"]');
+        }
+    },
+
+    hideElements(selector) {
+        document.querySelectorAll(selector).forEach(el => {
+            el.style.setProperty('display', 'none', 'important');
+            el.remove(); // Safely strip element from document tree
+        });
+    },
+
+    disableControls(selector) {
+        document.querySelectorAll(selector).forEach(el => {
+            el.disabled = true;
+            el.style.setProperty('pointer-events', 'none', 'important');
+            el.style.setProperty('opacity', '0.4', 'important');
+        });
+    }
+};
+
+// ─── 9. Global Exports & Run ─────────────────────────────────────────────────
 window.Toast = Toast;
 window.SkeletonLoader = SkeletonLoader;
 window.MicroInteractions = MicroInteractions;
 window.NetworkManager = NetworkManager;
 window.ServerUnavailableScreen = ServerUnavailableScreen;
+window.RoleBasedUI = RoleBasedUI;
 
 PageTransitions.init();
 document.addEventListener('DOMContentLoaded', () => {
@@ -371,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
     MicroInteractions.animateSidebar();
     NetworkManager.init();
     InactivityTracker.init();
+    RoleBasedUI.init(); // Harden dashboard UI controls based on roles
     LuxuryAtmosphere.init();
 });
 
