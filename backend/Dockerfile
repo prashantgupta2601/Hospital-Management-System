@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────
-# PG CARE HMS — Backend Dockerfile
+# PG CARE HMS — Backend Dockerfile (Step 2 Verification)
 # Multi-stage build: Maven build → lightweight JRE runtime
 # ─────────────────────────────────────────────────────────────
 
