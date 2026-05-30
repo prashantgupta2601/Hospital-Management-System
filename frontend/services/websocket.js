@@ -6,7 +6,7 @@ const WebSocketService = {
 
         console.log("Connecting to WebSocket...");
         // Use SockJS fallback if browser doesn't support WebSocket natively
-        const socket = new SockJS('http://localhost:8081/ws');
+        const socket = new SockJS(window.location.origin + '/ws');
         this.stompClient = Stomp.over(socket);
         
         // Disable excessive STOMP debug logs

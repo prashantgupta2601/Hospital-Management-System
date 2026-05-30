@@ -71,7 +71,7 @@ async function sendChatMessage() {
 
         const userId = typeof AuthService !== 'undefined' && AuthService.getUser() ? AuthService.getUser().id : 'anonymous';
 
-        const response = await axios.post('http://localhost:8080/api/chat/recommendation', {
+        const response = await axios.post(window.location.origin + '/api/chat/recommendation', {
             message: message,
             userId: userId.toString()
         }, { headers });

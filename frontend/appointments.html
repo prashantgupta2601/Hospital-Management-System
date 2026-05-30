@@ -465,7 +465,7 @@
 
         async function downloadReceiptPdf(billingId) {
             try {
-                const response = await axios.get(`http://localhost:8081/api/billings/${billingId}/receipt`, {
+                const response = await axios.get(window.location.origin + `/api/billings/${billingId}/receipt`, {
                     headers: {
                         'Authorization': 'Bearer ' + AuthService.getToken()
                     },
